@@ -1,0 +1,14 @@
+Windows
+
+#Activar Virtualenv
+\path\to\env\Scripts\activate
+
+#Postgres DB local password = admin
+#Install Postgres Driver
+pip install psycopg2
+
+#Postgres user for app
+create user consejero_app with password 'admin';
+
+#Postgres DB
+create database consejerodb with owner consejero_app;
