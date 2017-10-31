@@ -12,3 +12,6 @@ create user consejero_app with password 'admin';
 
 #Postgres DB
 create database consejerodb with owner consejero_app;
+
+#Superuser
+admin abc12345 daniel.trujillo@angelapp.com.co

@@ -1,4 +1,6 @@
 from django.db import models
+from Users.models import *
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -18,7 +20,7 @@ class NewsCategory(models.Model):
 	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
 	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
 	icon = models.ImageField(
-		upload_to = 'app_images/new_category_icon',
+		upload_to = 'app_images/news_category_icon',
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
@@ -61,8 +63,79 @@ class NewsFeed(models.Model):
 	created_time = models.DateTimeField(auto_now_add = True, verbose_name = 'Fecha de creación')
 	created_by = models.ForeignKey('auth.User', verbose_name = 'Usuario creador')
 
+class DocumentType(models.Model):
+	"""Atomic model for document cateogries"""
+	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
+	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
+	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	icon = models.ImageField(
+		upload_to = 'app_images/document_category_icon',
+		max_length = 255, 
+		help_text = '200x200 píxeles', 
+		null = True,
+		verbose_name = 'Ícono')
 
 
+class Document(models.Model):
+	"""Model for files in the library"""
+	doc_type = models.ForeignKey('DocumentType', verbose_name = 'Tipo de documento')
+	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
+	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	code = models.TextField(null = True, blank = True, verbose_name = 'Código')
+	url = models.URLField(null = True, blank = True, verbose_name = 'URL')
+	extensión = models.CharField(max_length = 10,null = True, blank = True, verbose_name = 'Extensión')
+	icon = models.ImageField(
+		upload_to = 'app_images/documents_icon',
+		max_length = 255, 
+		help_text = '200x200 píxeles', 
+		null = True,
+		verbose_name = 'Ícono')
+	file = models.FileField(upload_to = 'Library', verbose_name = 'Archivo', null = True, blank = True)
+
+class DocumentTags(models.Model):
+	"""Relation between document and tags"""
+	tag = models.ForeignKey('ContentTags', verbose_name = 'Tag asociado')
+	document = models.ForeignKey('Document', related_name = 'document_tags', verbose_name = 'Documento asociado')
 
 
+class OrganizationType(models.Model):
+	"""Atomic model for Organization cateogries"""
+	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
+	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
+	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	icon = models.ImageField(
+		upload_to = 'app_images/organizations_category_icon',
+		max_length = 255, 
+		help_text = '200x200 píxeles', 
+		null = True,
+		verbose_name = 'Ícono')
 
+class Organization(models.Model):
+	"""Model for organizations"""
+	organization_type = models.ForeignKey('OrganizationType', verbose_name = 'Tipo de Organización')
+	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
+	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	url = models.URLField(null = True, blank = True, verbose_name = 'Página Web')
+	icon = models.ImageField(
+		upload_to = 'app_images/orgnizations_icon',
+		max_length = 255, 
+		help_text = '200x200 píxeles', 
+		null = True,
+		verbose_name = 'Ícono')
+
+
+class CorporatePhoneBook(models.Model):
+	"""Model for organization branch offices"""
+	organization = models.ForeignKey('Organization', verbose_name = 'Organización')
+	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
+	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Phone')
+	address = models.TextField(max_length = 150, null = True, blank = True, verbose_name = 'Dirección')
+	city = models.ForeignKey('Users.City', verbose_name = 'Ciudad')
+	schedule = models.TextField(null = True, blank = True, verbose_name = 'Horario')
+	icon = models.ImageField(
+		upload_to = 'app_images/organization_branch_icon',
+		max_length = 255, 
+		help_text = '200x200 píxeles', 
+		null = True,
+		verbose_name = 'Ícono')

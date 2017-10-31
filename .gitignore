@@ -100,3 +100,9 @@ ENV/
 
 #DataBase
 *.sqlite3
+
+#Migrations
+*/migrations/*
+
+#ScriptsAndNotes
+*.txt
