@@ -17,6 +17,9 @@ class Role(models.Model):
 		null = True,
 		verbose_name = 'Ícono')
 
+	def __str__(self):
+		return self.name
+
 
 class DocumentType(models.Model):
 	"""Atomic model for identification document types"""
@@ -29,6 +32,9 @@ class DocumentType(models.Model):
 		help_text = '200x200 píxeles', 
 		null = True,
 		verbose_name = 'Ícono')
+
+	def __str__(self):
+		return self.name
 
 
 class Country(models.Model):
@@ -44,6 +50,9 @@ class Country(models.Model):
 		null = True,
 		verbose_name = 'Ícono')
 
+	def __str__(self):
+		return self.name
+
 class State(models.Model):
 	"""Model for the state - user location"""
 	country = models.ForeignKey('Country', related_name = 'state_country', verbose_name = 'País')
@@ -57,6 +66,9 @@ class State(models.Model):
 		help_text = '200x200 píxeles', 
 		null = True,
 		verbose_name = 'Ícono')
+
+	def __str__(self):
+		return self.name
 
 class City(models.Model):
 	"""Model for cities - user location"""
@@ -72,6 +84,9 @@ class City(models.Model):
 		null = True,
 		verbose_name = 'Ícono')
 
+	def __str__(self):
+		return str(self.state) + '-' + self.name
+
 class Gender(models.Model):
 	"""Atomic class for user gender segmentation"""
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
@@ -82,6 +97,9 @@ class Gender(models.Model):
 		help_text = '200x200 píxeles', 
 		null = True,
 		verbose_name = 'Ícono')
+
+	def __str__(self):
+		return self.name
 
 class LocationType(models.Model):
 	"""Atomic model for user location type, to allow segmentation"""
@@ -95,6 +113,9 @@ class LocationType(models.Model):
 		null = True,
 		verbose_name = 'Ícono')
 
+	def __str__(self):
+		return self.name
+
 class Location(models.Model):
 	"""User location register"""
 	city = models.ForeignKey('City', null = True, blank = True, related_name = 'location_cities', verbose_name = 'Ciudad')
@@ -105,6 +126,9 @@ class Location(models.Model):
 	latitude = models.DecimalField(max_digits = 9, decimal_places = 6, null = True, blank = True, verbose_name = 'Latitud')
 	longitude = models.DecimalField(max_digits = 9, decimal_places = 6, null = True, blank = True, verbose_name = 'Longitud')
 	date_created = models.DateTimeField(auto_now_add = True, verbose_name = 'Fecha de creación')
+
+	def __str__(self):
+		return str(self.date_created) + '-' + str(self.user)
 
 class BodyParts(models.Model):
 	"""Atomic model for create user avatar"""
@@ -117,6 +141,9 @@ class BodyParts(models.Model):
 		help_text = '200x200 píxeles', 
 		null = True,
 		verbose_name = 'Ícono')
+
+	def __str__(self):
+		return self.name
 
 class AvatarPiece(models.Model):
 	"""Options of body parts for avatar creation"""
@@ -131,24 +158,33 @@ class AvatarPiece(models.Model):
 		null = True,
 		verbose_name = 'Ícono')
 
+	def __str__(self):
+		return str(self.body_part) + '-' + self.name
+
 class UserAvatar(models.Model):
 	"""Model for save the user avatar combination"""
 	user = models.ForeignKey('auth.User', related_name = 'user_avatar', verbose_name = 'Usuario')
 	avatar_piece = models.ForeignKey('AvatarPiece', related_name = 'user_avatar_piece', verbose_name = 'Pieza seleccionada')
 
+	def __str__(self):
+		return str(self.user) + '-' + str(self.avatar_piece)
+
 class Profile(models.Model):
-	"""Model to complete de user info related with the app"""
+	"""Model to complete the user info related with the app"""
 
 	user = models.OneToOneField(
 		'auth.User',
 		verbose_name = 'Usuario')
 	role = models.ForeignKey('Role', null = True, blank = True, related_name = 'profile_role', verbose_name = 'Rol')
-	gender = models.ForeignKey('Gender', related_name = 'profile_gender', verbose_name = 'Rol')
+	gender = models.ForeignKey('Gender', related_name = 'profile_gender', verbose_name = 'Género')
 	document_type = models.ForeignKey('DocumentType', null = True, blank = True, verbose_name = 'Tipo de documento')
 	document_number = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Número de documento')
 	birthdate = models.DateField(null = True, blank = True, verbose_name = 'Fecha de nacimiento')
 	isNRCBeneficiary = models.BooleanField(default = False, verbose_name = 'Es beneficiario NRC')
 	contact_phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Teléfono de contacto')
+
+	def __str__(self):
+		return str(self.user)
 
 
 class SosContact(models.Model):
@@ -158,5 +194,8 @@ class SosContact(models.Model):
 	name = models.CharField(max_length = 70, verbose_name = 'Nombre y apellido')
 	email = models.EmailField(max_length = 240)
 	contact_phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Teléfono')
+
+	def __str__(self):
+		return str(self.user) + '-' + self.name
 
 

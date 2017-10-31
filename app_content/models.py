@@ -13,6 +13,9 @@ class ApplicationConfiguration(models.Model):
 	debug_mode = models.BooleanField(default = True, verbose_name = 'Habilitar modo debug')
 	min_pin_length = models.SmallIntegerField(verbose_name = 'Longitud mínima de pin')
 
+	def __str__(self):
+		return self.video_tutorial_id
+
 
 class NewsCategory(models.Model):
 	"""News category model"""
@@ -26,6 +29,9 @@ class NewsCategory(models.Model):
 		null = True,
 		verbose_name = 'Ícono')
 
+	def __str__(self):
+		return self.name
+
 
 class ContentTags(models.Model):
 	"""Tags for the content"""
@@ -37,10 +43,17 @@ class ContentTags(models.Model):
 		null = True,
 		verbose_name = 'Ícono')
 
+	def __str__(self):
+		return self.name
+
+
 class NewsTags(models.Model):
 	"""Relation between news and tags"""
 	tag = models.ForeignKey('ContentTags', verbose_name = 'Tag asociado')
 	new = models.ForeignKey('NewsFeed', related_name = 'news_tags', verbose_name = 'Noticia asociada')
+
+	def __str__(self):
+		return self.tag + '-' + self.new
 
 
 class NewsFeed(models.Model):
@@ -63,6 +76,9 @@ class NewsFeed(models.Model):
 	created_time = models.DateTimeField(auto_now_add = True, verbose_name = 'Fecha de creación')
 	created_by = models.ForeignKey('auth.User', verbose_name = 'Usuario creador')
 
+	def __str__(self):
+		return self.category + '-' + self.tittle
+
 class DocumentType(models.Model):
 	"""Atomic model for document cateogries"""
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
@@ -74,6 +90,9 @@ class DocumentType(models.Model):
 		help_text = '200x200 píxeles', 
 		null = True,
 		verbose_name = 'Ícono')
+
+	def __str__(self):
+		return self.name
 
 
 class Document(models.Model):
@@ -92,10 +111,16 @@ class Document(models.Model):
 		verbose_name = 'Ícono')
 	file = models.FileField(upload_to = 'Library', verbose_name = 'Archivo', null = True, blank = True)
 
+	def __str__(self):
+		return self.doc_type + '-' + self.name
+
 class DocumentTags(models.Model):
 	"""Relation between document and tags"""
 	tag = models.ForeignKey('ContentTags', verbose_name = 'Tag asociado')
 	document = models.ForeignKey('Document', related_name = 'document_tags', verbose_name = 'Documento asociado')
+
+	def __str__(self):
+		return self.tag + '-' + self.document
 
 
 class OrganizationType(models.Model):
@@ -110,6 +135,9 @@ class OrganizationType(models.Model):
 		null = True,
 		verbose_name = 'Ícono')
 
+	def __str__(self):
+		return self.name
+
 class Organization(models.Model):
 	"""Model for organizations"""
 	organization_type = models.ForeignKey('OrganizationType', verbose_name = 'Tipo de Organización')
@@ -123,12 +151,13 @@ class Organization(models.Model):
 		null = True,
 		verbose_name = 'Ícono')
 
+	def __str__(self):
+		return self.name
+
 
 class CorporatePhoneBook(models.Model):
 	"""Model for organization branch offices"""
 	organization = models.ForeignKey('Organization', verbose_name = 'Organización')
-	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
-	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
 	phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Phone')
 	address = models.TextField(max_length = 150, null = True, blank = True, verbose_name = 'Dirección')
 	city = models.ForeignKey('Users.City', verbose_name = 'Ciudad')
@@ -139,3 +168,6 @@ class CorporatePhoneBook(models.Model):
 		help_text = '200x200 píxeles', 
 		null = True,
 		verbose_name = 'Ícono')
+
+	def __str__(self):
+		return self.organization + '-' + self.city
