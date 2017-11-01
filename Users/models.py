@@ -15,6 +15,7 @@ class Role(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -31,6 +32,7 @@ class DocumentType(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -48,6 +50,7 @@ class Country(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -65,6 +68,7 @@ class State(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -82,6 +86,7 @@ class City(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -96,6 +101,7 @@ class Gender(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -111,6 +117,7 @@ class LocationType(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -140,6 +147,7 @@ class BodyParts(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -156,6 +164,7 @@ class AvatarPiece(models.Model):
 		max_length = 255, 
 		help_text = '300x300 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
