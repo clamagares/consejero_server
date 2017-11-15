@@ -22,6 +22,38 @@ class Role(models.Model):
 		return self.name
 
 
+class EthnicGroup(models.Model):
+	"""Atomic model for profile NRC personalized segmentation for ethnic group"""
+	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
+	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
+	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	icon = models.ImageField(
+		upload_to = 'app_images/ethinic_group_icon', 
+		max_length = 255, 
+		help_text = '200x200 píxeles', 
+		null = True,
+		blank = True,
+		verbose_name = 'Ícono')
+
+	def __str__(self):
+		return self.name
+
+class Condition(models.Model):
+	"""Atomic model for profile NRC personalized segmentation for user condition"""
+	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
+	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
+	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	icon = models.ImageField(
+		upload_to = 'app_images/condition_icon', 
+		max_length = 255, 
+		help_text = '200x200 píxeles', 
+		null = True,
+		blank = True,
+		verbose_name = 'Ícono')
+
+	def __str__(self):
+		return self.name
+
 class DocumentType(models.Model):
 	"""Atomic model for identification document types"""
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
@@ -186,10 +218,13 @@ class Profile(models.Model):
 		verbose_name = 'Usuario')
 	role = models.ForeignKey('Role', null = True, blank = True, related_name = 'profile_role', verbose_name = 'Rol')
 	gender = models.ForeignKey('Gender', related_name = 'profile_gender', verbose_name = 'Género')
+	ethnic_group = models.ForeignKey('EthnicGroup', null = True, blank = True, related_name = 'profile_ethnic_group', verbose_name = 'Grupo Étnico')
+	condition = models.ForeignKey('Condition', null = True, blank = True, related_name = 'profile_condition', verbose_name = 'Condición')
 	document_type = models.ForeignKey('DocumentType', null = True, blank = True, verbose_name = 'Tipo de documento')
 	document_number = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Número de documento')
 	birthdate = models.DateField(null = True, blank = True, verbose_name = 'Fecha de nacimiento')
 	isNRCBeneficiary = models.BooleanField(default = False, verbose_name = 'Es beneficiario NRC')
+	origin_city = models.ForeignKey('City', null = True, blank = True, related_name = 'profile_origin_city', verbose_name = 'Ciudad de origen')
 	contact_phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Teléfono de contacto')
 
 	def __str__(self):

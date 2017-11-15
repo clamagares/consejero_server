@@ -37,4 +37,8 @@ class UsersView(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = ProfileSerializer
 	permission_classes = (IsOwner,)
 
-#class CreateUsersView(generics.CreateAPIView):
+class CreateUsersView(generics.CreateAPIView):
+	"""View to create user and profile"""
+	queryset = User.objects.all()
+	serializer_class = UserProfileCreateSerializer
+	
