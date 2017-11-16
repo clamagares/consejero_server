@@ -236,7 +236,7 @@ class SosContact(models.Model):
 	user = models.ForeignKey('auth.User',related_name = 'users_emergency_contact', verbose_name = 'Usuario')
 	city = models.ForeignKey('City', null = True, blank = True, related_name = 'sos_cities', verbose_name = 'Ciudad')
 	name = models.CharField(max_length = 70, verbose_name = 'Nombre y apellido')
-	email = models.EmailField(max_length = 240)
+	email = models.EmailField(null = True, blank = True,max_length = 240)
 	contact_phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Teléfono')
 
 	def __str__(self):

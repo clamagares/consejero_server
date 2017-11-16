@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^applicationConfiguration/$', views.ApplicationConfigurationView.as_view()),
     url(r'^profile/(?P<pk>[0-9]+)/$', views.UsersView.as_view()),
     url(r'^create_user/$', views.CreateUsersView.as_view()),
+    url(r'^emergency_contact/$', views.EmergencyContactsView.as_view()),
+    url(r'^emergency_contact/(?P<pk>[0-9]+)/$', views.EmergencyContactEdit.as_view()),
 ]

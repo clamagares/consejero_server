@@ -7,6 +7,12 @@ Windows
 #Install Postgres Driver
 pip install psycopg2
 
+#Connect to database
+psql -U postgres
+
+#List all databases
+\l
+
 #Postgres user for app
 create user consejero_app with password 'admin';
 
@@ -16,5 +22,10 @@ create database consejerodb with owner consejero_app;
 #Superuser
 admin abc12345 daniel.trujillo@angelapp.com.co
 
+
 #ApiKey for Development Windows dtrujila
 2e0fa1b1f997bcd16d390d75306c462e088fb1b3
+=======
+#api Key for macbook
+97d2a5f811e22f674c79b5d353aa3b6a6b1d6ad7
+
