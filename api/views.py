@@ -42,3 +42,20 @@ class CreateUsersView(generics.CreateAPIView):
 	queryset = User.objects.all()
 	serializer_class = UserProfileCreateSerializer
 	
+class EmergencyContactsView(generics.ListCreateAPIView):
+	"""View for get the emergency contacts info"""
+
+	serializer_class = SosContactSerializer
+	permission_classes = (IsOwner,)
+
+	def get_queryset(self):
+		user = self.request.user
+		return SosContact.objects.filter(user = user)
+
+class EmergencyContactEdit(generics.RetrieveUpdateDestroyAPIView):
+	permission_classes = (IsOwner,)
+	queryset = SosContact.objects.all()
+	serializer_class = SosContactSerializer
+
+
+

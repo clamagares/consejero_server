@@ -30,6 +30,15 @@ class ProfileSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 		depth = 1
 
+class SosContactSerializer(serializers.ModelSerializer):
+	"""Serializer for emergency contact model"""
+	user = serializers.PrimaryKeyRelatedField(queryset = User.objects.all())
+	city = serializers.PrimaryKeyRelatedField(queryset = City.objects.all())
+	class Meta:
+		model = SosContact
+		fields = ('user', 'city','name','email','contact_phone')
+		depth = 1
+
 
 class UserProfileCreateSerializer(serializers.Serializer):
 	"""Serializer to create new user and profile"""
