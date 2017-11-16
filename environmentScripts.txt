@@ -15,3 +15,6 @@ create database consejerodb with owner consejero_app;
 
 #Superuser
 admin abc12345 daniel.trujillo@angelapp.com.co
+
+#ApiKey for Development Windows dtrujila
+2e0fa1b1f997bcd16d390d75306c462e088fb1b3
