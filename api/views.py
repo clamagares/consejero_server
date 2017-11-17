@@ -58,4 +58,15 @@ class EmergencyContactEdit(generics.RetrieveUpdateDestroyAPIView):
 	serializer_class = SosContactSerializer
 
 
+class UserAvatarPieces(generics.ListCreateAPIView):
+	"""View to create or get the list of the user avatar pieces"""
+	permission_classes = (IsOwner,)
+	queryset = UserAvatar.objects.all()
+	serializer_class = ListUserAvatarSerializer
+	
 
+	# def list(self, request):
+	# 	# Note the use of `get_queryset()` instead of `self.queryset`
+	# 	queryset = self.get_queryset()
+	# 	serializer = UserAvatarSerializer(queryset, many=True)
+	# 	return Response(serializer.data)

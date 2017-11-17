@@ -132,3 +132,45 @@ class UserProfileCreateSerializer(serializers.Serializer):
 		location.save()
 
 		return user
+
+
+
+
+class UserAvatarSerializer(serializers.Serializer):
+	"""Serializer for user avatar pieces"""
+	user = serializers.IntegerField(write_only = True)
+	avatar_piece = serializers.IntegerField(write_only = True)
+
+
+	def create(self, validated_data):
+		piece = AvatarPiece.objects.get(pk = validated_data['avatar_piece'])
+		#print('encontrado piece' + str(piece))
+		user = User.objects.get(pk = validated_data['user'])
+		#print('encontrado user' + str(user))
+		try:
+			user_avatar = UserAvatar.objects.get(user = user, avatar_piece__body_part = piece.body_part)
+			#print('encontrado user_avatar' + str(user_avatar))
+			user_avatar.avatar_piece = piece
+		except:
+			user_avatar = UserAvatar.objects.create(user = user, avatar_piece = piece)
+			#print('creado user_avatar' + str(user_avatar))
+		user_avatar.save()
+		#print('guardado user_avatar' + str(user_avatar))
+		return user_avatar
+
+
+class UserAvatarResponseSerializer(serializers.ModelSerializer):
+	"""Serializer for response to avatar pieces creation"""
+
+	user = serializers.PrimaryKeyRelatedField(queryset = User.objects.all())
+	avatar_piece = serializers.PrimaryKeyRelatedField(queryset = AvatarPiece.objects.all())
+
+	class Meta:
+		model = AvatarPiece
+		fields = ('user', 'avatar_piece',)
+
+
+
+class ListUserAvatarSerializer(serializers.ListSerializer):
+	child = UserAvatarSerializer()
+
