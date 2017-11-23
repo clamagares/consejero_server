@@ -25,7 +25,7 @@ from django.contrib.auth.models import User
 from api.permissions import *
 from api.serializers import *
 
-class ApplicationConfigurationView(generics.ListAPIView):
+class ApplicationConfigurationView(generics.RetrieveAPIView):
 	"""Get the application basic configuration"""
 	queryset = ApplicationConfiguration.objects.all()
 	serializer_class = AppConfigurationSerializer

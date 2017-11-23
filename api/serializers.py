@@ -22,6 +22,82 @@ class AppConfigurationSerializer(serializers.ModelSerializer):
 		model = ApplicationConfiguration
 		fields = '__all__'
 
+	def to_representation(self, instance):
+		resp = {}
+		resp['video_tutorial_id'] = instance.video_tutorial_id
+		resp['emergency_message'] = instance.emergency_message
+		resp['about_noruegan_council'] = instance.about_noruegan_council
+		resp['min_pin_length'] = instance.min_pin_length
+		resp['document_type_list'] = DocumentTypeSerializer(DocumentType.objects.all(), many = True).data
+		resp['gender_list'] = GenderSerializer(Gender.objects.all(), many = True).data
+		resp['city_list'] = CitySerializer(City.objects.all(), many = True).data
+		resp['condition_list'] = ConditionSerializer(Condition.objects.all(), many = True).data
+		resp['ethnic_group_list'] = EthnicGroupSerializer(EthnicGroup.objects.all(), many = True).data
+		resp['role_list'] = RoleSerializer(Role.objects.all(), many = True).data
+		resp['body_part'] = BodyPartSerializer(BodyParts.objects.all(), many = True).data
+		resp['avatar_pieces_list'] = AvatarPieceSerializer(AvatarPiece.objects.all(), many = True).data
+
+		return resp
+
+
+class DocumentTypeSerializer(serializers.ModelSerializer):
+	"""Model to serializer document types"""
+
+	class Meta:
+		model = DocumentType
+		fields = '__all__'
+
+class GenderSerializer(serializers.ModelSerializer):
+	"""Model to serializer Gender"""
+
+	class Meta:
+		model = Gender
+		fields = '__all__'
+
+class CitySerializer(serializers.ModelSerializer):
+	"""Model to serializer city"""
+
+	state = serializers.CharField(read_only = True)
+
+	class Meta:
+		model = City
+		fields = ('id','name', 'code','abreviature','state','description','icon',)
+
+class ConditionSerializer(serializers.ModelSerializer):
+	"""Model to serializer condition"""
+
+	class Meta:
+		model = Condition
+		fields = '__all__'
+
+class EthnicGroupSerializer(serializers.ModelSerializer):
+	"""Model to serializer ethnic group"""
+
+	class Meta:
+		model = EthnicGroup
+		fields = '__all__'
+
+class RoleSerializer(serializers.ModelSerializer):
+	"""Model to serializer role"""
+
+	class Meta:
+		model = Role
+		fields = '__all__'
+
+class BodyPartSerializer(serializers.ModelSerializer):
+	"""Model to serializer body part"""
+
+	class Meta:
+		model = BodyParts
+		fields = '__all__'
+
+class AvatarPieceSerializer(serializers.ModelSerializer):
+	"""Model to serializer avatar pieces"""
+
+	class Meta:
+		model = AvatarPiece
+		fields = '__all__'
+
 class ProfileSerializer(serializers.ModelSerializer):
 	"""Serializer for profile and User information"""
 
@@ -98,6 +174,7 @@ class UserProfileCreateSerializer(serializers.Serializer):
 		profile.condition = Condition.objects.get(pk = validated_data['condition'])
 		profile.document_type = DocumentType.objects.get(pk = validated_data['document_type'])
 		profile.origin_city = City.objects.get(pk = validated_data['origin_city'])
+		profile.role = Role.objects.get(pk = validated_data['role'])
 
 		try:
 			profile.contact_phone = validated_data['contact_phone']
@@ -132,6 +209,14 @@ class UserProfileCreateSerializer(serializers.Serializer):
 		location.save()
 
 		return user
+
+
+	def to_representation(self, obj):
+		resp = {}
+		token = Token.objects.get(user = obj)
+		resp['token'] = token.key
+
+		return resp
 
 
 
