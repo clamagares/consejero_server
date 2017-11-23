@@ -35,7 +35,7 @@ class AppConfigurationSerializer(serializers.ModelSerializer):
 		resp['ethnic_group_list'] = EthnicGroupSerializer(EthnicGroup.objects.all(), many = True).data
 		resp['role_list'] = RoleSerializer(Role.objects.all(), many = True).data
 		resp['body_part'] = BodyPartSerializer(BodyParts.objects.all(), many = True).data
-		resp['avatar_pieces_list'] = AvatarPieceSerializer(AvatarPiece.objects.all(), many = True).data
+		resp['avatar_pieces_list'] = AvatarPieceSerializer(AvatarPiece.objects.all(), many = True, context={'request': self.context['request']}).data
 
 		return resp
 
