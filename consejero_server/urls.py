@@ -20,3 +20,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include('api.urls')),
 ]
+
+admin.site.site_header = 'Sitio de administración Conse - Consejo Noruego de Refugiados'
+admin.site.site_title = 'Administración Conse'
+admin.site.index_title = 'Conse - Página de administración'

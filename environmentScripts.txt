@@ -29,3 +29,9 @@ admin abc12345 daniel.trujillo@angelapp.com.co
 #api Key for macbook
 97d2a5f811e22f674c79b5d353aa3b6a6b1d6ad7
 
+#Link for DB operations production
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-centos-7
+
+#ApiKey consejo.nrc.org.co
+f7a328923cf5664e64b4dd0be59a1e787c6b8140
+

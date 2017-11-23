@@ -26,7 +26,7 @@ SECRET_KEY = 'u%(q4xs670v4w54!v(j80q$pc79dl+@o+@^2gj(lw^498m%zsc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['piensaentic.co','consejo.nrc.org.co']
 
 
 # Application definition
