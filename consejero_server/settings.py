@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['piensaentic.co','consejo.nrc.org.co']
 
-
 # Application definition
 
 INSTALLED_APPS = [
