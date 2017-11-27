@@ -170,11 +170,11 @@ class UserProfileCreateSerializer(serializers.Serializer):
 			document_number = validated_data['document_number'],
 			birthdate = validated_data['birthdate'],
 			isNRCBeneficiary = validated_data['isNRCBeneficiary'])
-		profile.ethnic_group = EthnicGroup.objects.get(pk = validated_data['ethnic_group'])
-		profile.condition = Condition.objects.get(pk = validated_data['condition'])
+		# profile.ethnic_group = EthnicGroup.objects.get(pk = validated_data['ethnic_group'])
+		# profile.condition = Condition.objects.get(pk = validated_data['condition'])
 		profile.document_type = DocumentType.objects.get(pk = validated_data['document_type'])
-		profile.origin_city = City.objects.get(pk = validated_data['origin_city'])
-		profile.role = Role.objects.get(pk = validated_data['role'])
+		# profile.origin_city = City.objects.get(pk = validated_data['origin_city'])
+		# profile.role = Role.objects.get(pk = validated_data['role'])
 
 		try:
 			profile.contact_phone = validated_data['contact_phone']
@@ -182,31 +182,58 @@ class UserProfileCreateSerializer(serializers.Serializer):
 			print('War: contact_phone missing')
 		profile.save()
 
-		#Creating Location instance
-		location_city = City.objects.get(pk = validated_data['actual_city'])
-		location = Location.objects.create(city = location_city, user = user)
 		try:
-			location.location_type = LocationType.objects.get(pk = validated_data['location_type'])
+			profile.ethnic_group = validated_data['ethnic_group']
 		except:
-			print('War: location_type missing')
-		try:
-			location.address = validated_data['address']
-		except:
-			print('War: address missing')
-		try:
-			location.latitude = validated_data['latitude']
-		except:
-			print('War: latitude missing')
-		try:
-			location.longitude = validated_data['longitude']
-		except:
-			print('War: longitude missing')
-		try:
-			location.phone_number = validated_data['contact_phone']
-		except:
-			print('War: phone_number missing')	
+			print('War: ethnic_group missing')
+		profile.save()
 
-		location.save()
+		try:
+			profile.condition = validated_data['condition']
+		except:
+			print('War: condition missing')
+		profile.save()
+
+		try:
+			profile.origin_city = validated_data['origin_city']
+		except:
+			print('War: origin_city missing')
+		profile.save()
+
+		try:
+			profile.role = validated_data['role']
+		except:
+			print('War: role missing')
+		profile.save()
+
+
+		#Creating Location instance
+		try:
+			location_city = City.objects.get(pk = validated_data['actual_city'])
+			location = Location.objects.create(city = location_city, user = user)
+			try:
+				location.location_type = LocationType.objects.get(pk = validated_data['location_type'])
+			except:
+				print('War: location_type missing')
+			try:
+				location.address = validated_data['address']
+			except:
+				print('War: address missing')
+			try:
+				location.latitude = validated_data['latitude']
+			except:
+				print('War: latitude missing')
+			try:
+				location.longitude = validated_data['longitude']
+			except:
+				print('War: longitude missing')
+			try:
+				location.phone_number = validated_data['contact_phone']
+			except:
+				print('War: phone_number missing')	
+			location.save()
+		except:
+			print('War: actual_city missing')
 
 		return user
 
