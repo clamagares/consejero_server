@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from api.utils import *
 
 # Create your models here.
 
@@ -51,13 +52,39 @@ class UserTopicProgress(models.Model):
 class ContactForm(models.Model):
 	"""The user contact message model"""
 	user = models.ForeignKey('auth.User', verbose_name = 'Usuario')
-	subject = models.CharField(max_length = 200, verbose_name = 'Asunto')
+	#subject = models.CharField(max_length = 200, verbose_name = 'Asunto')
+	message_type = models.ForeignKey('ContactFormTypes', verbose_name = 'Tipo de mensaje', null = True, blank = True)
 	detail = models.TextField(verbose_name = 'Detalle')
-	date_sent = models.DateTimeField(verbose_name = 'Fecha de envío')
+	#date_sent = models.DateTimeField(verbose_name = 'Fecha de envío')
 	date_receipt = models.DateTimeField(auto_now_add = True, verbose_name = 'Fecha de recepción')
 
 	def __str__(self):
-		return str(self.date_sent) + '-' + str(self.user) + '-' + self.subject
+		return str(self.date_receipt) + '-' + str(self.user) + '-' + str(self.message_type)
+
+	def save(self, *args, **kwargs):
+		if not self.pk:
+			send_contact_email(self)
+		super(ContactForm, self).save(*args, **kwargs)
+
+
+class ContactFormTypes(models.Model):
+	"""The types for contact message model"""
+	
+	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
+	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
+	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	icon = models.ImageField(
+		upload_to = 'app_images/contact_form_types', 
+		max_length = 255, 
+		help_text = '200x200 píxeles', 
+		null = True,
+		blank = True,
+		verbose_name = 'Ícono')
+
+	def __str__(self):
+		return self.name
+
+
 
 
 class EmergencyAlerts(models.Model):

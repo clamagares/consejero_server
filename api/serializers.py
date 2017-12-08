@@ -11,6 +11,7 @@ from app_content.models import  *
 from Users.models import *
 from consejero_server import *
 from user_interaction import *
+from user_interaction.models import *
 from api import *
 from api.strings import *
 from api.errorcodes import *
@@ -36,6 +37,7 @@ class AppConfigurationSerializer(serializers.ModelSerializer):
 		resp['role_list'] = RoleSerializer(Role.objects.all(), many = True).data
 		resp['body_part'] = BodyPartSerializer(BodyParts.objects.all(), many = True).data
 		resp['avatar_pieces_list'] = AvatarPieceSerializer(AvatarPiece.objects.all(), many = True, context={'request': self.context['request']}).data
+		resp['contact_form_type_list'] = ContactFormTypeSerializer(ContactFormTypes.objects.all(), many = True, context={'request': self.context['request']}).data
 
 		return resp
 
@@ -98,12 +100,20 @@ class AvatarPieceSerializer(serializers.ModelSerializer):
 		model = AvatarPiece
 		fields = '__all__'
 
+class ContactFormTypeSerializer(serializers.ModelSerializer):
+	"""Model to serializer contact form types"""
+
+	class Meta:
+		model = ContactFormTypes
+		fields = '__all__'
+
 class ProfileSerializer(serializers.ModelSerializer):
-	"""Serializer for profile and User information"""
+	"""Serializer for profile information"""
 
 	class Meta:
 		model = Profile
-		fields = '__all__'
+		exclude = ('user',)
+		#fields = '__all__'
 		depth = 1
 
 class SosContactSerializer(serializers.ModelSerializer):
@@ -114,6 +124,13 @@ class SosContactSerializer(serializers.ModelSerializer):
 		model = SosContact
 		fields = ('user', 'city','name','email','contact_phone')
 		depth = 1
+
+
+class UserSerializer(serializers.ModelSerializer):
+	"""Serializer for auth.user model"""
+	class Meta:
+		model = User
+		fields = ('id', 'first_name', 'last_name','username','email')
 
 
 class UserProfileCreateSerializer(serializers.Serializer):
@@ -183,25 +200,25 @@ class UserProfileCreateSerializer(serializers.Serializer):
 		profile.save()
 
 		try:
-			profile.ethnic_group = validated_data['ethnic_group']
+			profile.ethnic_group = EthnicGroup.objects.get(id=validated_data['ethnic_group'])
 		except:
 			print('War: ethnic_group missing')
 		profile.save()
 
 		try:
-			profile.condition = validated_data['condition']
+			profile.condition = Condition.objects.get(id=validated_data['condition'])
 		except:
 			print('War: condition missing')
 		profile.save()
 
 		try:
-			profile.origin_city = validated_data['origin_city']
+			profile.origin_city = City.objects.get(id=validated_data['origin_city'])
 		except:
 			print('War: origin_city missing')
 		profile.save()
 
 		try:
-			profile.role = validated_data['role']
+			profile.role = RoleSerializer.objects.get(id=validated_data['role'])
 		except:
 			print('War: role missing')
 		profile.save()
@@ -241,11 +258,19 @@ class UserProfileCreateSerializer(serializers.Serializer):
 	def to_representation(self, obj):
 		resp = {}
 		token = Token.objects.get(user = obj)
+		profile = Profile.objects.get(user = obj)
 		resp['token'] = token.key
+		#resp['id'] = obj.id
+		profile_serializer = ProfileSerializer(Profile.objects.get(user = obj), many =  False)
+		#profile_serializer = ProfileSerializer(data = profile, many =  False)
+		#profile_serializer.is_valid(raise_exception=True)
+		resp['profile'] = ProfileSerializer(Profile.objects.get(user = obj), many =  False).data
+		print('serializado perfile')
+		#user_serializer = UserSerializer(User.objects.get(username = obj.username), many =  False)
+		#user_serializer.is_valid(raise_exception=True)
+		resp['user'] = UserSerializer(User.objects.get(username = obj.username), many =  False).data
 
 		return resp
-
-
 
 
 class UserAvatarSerializer(serializers.Serializer):
@@ -282,7 +307,28 @@ class UserAvatarResponseSerializer(serializers.ModelSerializer):
 		fields = ('user', 'avatar_piece',)
 
 
-
 class ListUserAvatarSerializer(serializers.ListSerializer):
 	child = UserAvatarSerializer()
+
+
+class ContactFormSerializer(serializers.ModelSerializer):
+	"""Serializer for contact form"""
+
+	user = serializers.PrimaryKeyRelatedField(queryset = User.objects.all())
+
+	message_type = serializers.PrimaryKeyRelatedField(queryset = ContactFormTypes.objects.all())
+
+	class Meta:
+		model = ContactForm
+		fields = '__all__'
+
+
+
+
+
+
+
+
+
+
 

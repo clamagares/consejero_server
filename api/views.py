@@ -70,3 +70,16 @@ class UserAvatarPieces(generics.ListCreateAPIView):
 	# 	queryset = self.get_queryset()
 	# 	serializer = UserAvatarSerializer(queryset, many=True)
 	# 	return Response(serializer.data)
+
+
+
+class ContactForm(generics.CreateAPIView):
+	"""View to create contact forms"""
+
+	queryset = ContactForm.objects.all()
+	serializer_class = ContactFormSerializer
+
+
+
+
+
