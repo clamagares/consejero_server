@@ -4,9 +4,26 @@ from api.utils import *
 
 # Create your models here.
 
+class Courses(models.Model):
+	"""Course in the app"""
+	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
+	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
+	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	icon = models.ImageField(
+		upload_to = 'app_images/course_icon',
+		max_length = 255, 
+		help_text = '200x200 píxeles', 
+		null = True,
+		blank = True,
+		verbose_name = 'Ícono')
+
+	def __str__(self):
+		return self.name
+
 
 class Topic(models.Model):
-	"""Course in the app"""
+	"""Category in the app"""
+	course = models.ForeignKey('Courses', related_name = 'course_topics', blank = True, null = True, verbose_name = 'Curso')
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
 	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
 	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
@@ -15,14 +32,15 @@ class Topic(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
-		return self.name
+		return str(self.course) + ' - ' + self.name
 
 class TopicActivity(models.Model):
 	"""The activities in the course to get the user progress"""
-	topic = models.ForeignKey('Topic', verbose_name = 'Curso')
+	topic = models.ForeignKey('Topic', verbose_name = 'Curso',related_name = 'topic_activity_list')
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
 	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
 	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
@@ -32,6 +50,7 @@ class TopicActivity(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):

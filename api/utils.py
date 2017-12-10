@@ -24,6 +24,6 @@ def send_contact_email(contact_form):
     message = contact_form.detail
     #message = user.first_name + ' tu contraseña es: ' + password
     email_contact_us = ApplicationConfiguration.objects.get(id = 1).email_contact_us
-    msg = EmailMultiAlternatives(subject,message, "contac@consejo.nrc.org.co",[email_contact_us],)
+    msg = EmailMultiAlternatives(subject,message, "contacto@consejo.nrc.org.co",[email_contact_us],)
     msg.attach_alternative(message, "text/html")
     msg.send()

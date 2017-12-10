@@ -3,6 +3,7 @@ from user_interaction.models import *
 
 # Register your models here.
 
+admin.site.register(Courses)
 admin.site.register(Topic)
 admin.site.register(TopicActivity)
 admin.site.register(UserTopicProgress)

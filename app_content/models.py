@@ -12,6 +12,8 @@ class ApplicationConfiguration(models.Model):
 	email_contact_us = models.EmailField(max_length = 150, verbose_name = 'Email de recepción mensajes de contacto')
 	debug_mode = models.BooleanField(default = True, verbose_name = 'Habilitar modo debug')
 	min_pin_length = models.SmallIntegerField(verbose_name = 'Longitud mínima de pin')
+	psw_regular_expression = models.CharField(max_length = 150, blank = True, null = True, verbose_name = 'Expresión regular contraseña')
+	psw_error_recomendation =models.CharField(max_length = 150, blank = True, null = True, verbose_name = 'Mensaje para expresión de contraseña')
 
 	def __str__(self):
 		return self.video_tutorial_id
@@ -79,7 +81,7 @@ class NewsFeed(models.Model):
 	def __str__(self):
 		return self.category + '-' + self.tittle
 
-class DocumentType(models.Model):
+class DocumentTextType(models.Model):
 	"""Atomic model for document cateogries"""
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
 	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
@@ -97,7 +99,7 @@ class DocumentType(models.Model):
 
 class Document(models.Model):
 	"""Model for files in the library"""
-	doc_type = models.ForeignKey('DocumentType', verbose_name = 'Tipo de documento')
+	doc_type = models.ForeignKey('DocumentTextType', verbose_name = 'Tipo de documento')
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
 	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
 	code = models.TextField(null = True, blank = True, verbose_name = 'Código')

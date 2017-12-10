@@ -10,7 +10,7 @@ from app_content.models import  *
 #from Users import *
 from Users.models import *
 from consejero_server import *
-from user_interaction import *
+#from user_interaction import *
 from user_interaction.models import *
 from api import *
 from api.strings import *
@@ -29,7 +29,10 @@ class AppConfigurationSerializer(serializers.ModelSerializer):
 		resp['emergency_message'] = instance.emergency_message
 		resp['about_noruegan_council'] = instance.about_noruegan_council
 		resp['min_pin_length'] = instance.min_pin_length
+		resp['psw_regular_expression'] = instance.psw_regular_expression
+		resp['psw_error_recomendation'] = instance.psw_error_recomendation
 		resp['document_type_list'] = DocumentTypeSerializer(DocumentType.objects.all(), many = True).data
+		print(str(resp['document_type_list']))
 		resp['gender_list'] = GenderSerializer(Gender.objects.all(), many = True).data
 		resp['city_list'] = CitySerializer(City.objects.all(), many = True).data
 		resp['condition_list'] = ConditionSerializer(Condition.objects.all(), many = True).data
@@ -38,8 +41,46 @@ class AppConfigurationSerializer(serializers.ModelSerializer):
 		resp['body_part'] = BodyPartSerializer(BodyParts.objects.all(), many = True).data
 		resp['avatar_pieces_list'] = AvatarPieceSerializer(AvatarPiece.objects.all(), many = True, context={'request': self.context['request']}).data
 		resp['contact_form_type_list'] = ContactFormTypeSerializer(ContactFormTypes.objects.all(), many = True, context={'request': self.context['request']}).data
+		resp['course_list'] = CourseSerializer(Courses.objects.all(), many = True, context={'request': self.context['request']}).data
 
 		return resp
+
+
+class TopicActivitySerializer(serializers.ModelSerializer):
+	"""Topic Activity Serializer"""
+
+	class Meta:
+		model = TopicActivity
+		fields = '__all__'
+
+
+class TopicSerializer(serializers.ModelSerializer):
+
+	course = serializers.PrimaryKeyRelatedField(queryset = Courses.objects.all())
+
+	class Meta:
+		model = Topic
+		fields = ('id','course','name','abreviature','description','icon','topic_activity_list')
+		depth = 1
+		
+
+class CourseSerializer(serializers.ModelSerializer):
+
+	course_topics = TopicSerializer(many = True)
+
+	class Meta:
+		model = Courses
+		fields = ('id','name','abreviature','description','icon','course_topics')
+		
+
+class UserTopicProgressSerializer(serializers.ModelSerializer):
+
+	user = serializers.PrimaryKeyRelatedField(queryset = User.objects.all())
+	topic_activity = serializers.PrimaryKeyRelatedField(queryset = TopicActivity.objects.all())
+
+	class Meta:
+		model = UserTopicProgress
+		fields = ('user','topic_activity','date_completed')
 
 
 class DocumentTypeSerializer(serializers.ModelSerializer):
@@ -110,11 +151,160 @@ class ContactFormTypeSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
 	"""Serializer for profile information"""
 
+	first_name = serializers.CharField(write_only = True, required = False)
+	last_name = serializers.CharField(write_only = True, required = False)
+
 	class Meta:
 		model = Profile
 		exclude = ('user',)
 		#fields = '__all__'
 		depth = 1
+
+
+# class ProfileUpdateSerializer(serializers.ModelSerializer):
+# 	first_name = serializers.CharField(write_only = True, required = False)
+# 	last_name = serializers.CharField(write_only = True, required = False)
+# 	document_type = serializers.PrimaryKeyRelatedField(queryset = DocumentType.objects.all(), required = False)
+# 	gender = serializers.PrimaryKeyRelatedField(queryset = Gender.objects.all(), required = False)
+# 	ethnic_group = serializers.PrimaryKeyRelatedField(queryset = EthnicGroup.objects.all(), required = False)
+# 	condition = serializers.PrimaryKeyRelatedField(queryset = Condition.objects.all(), required = False)
+# 	role = serializers.PrimaryKeyRelatedField(queryset = Role.objects.all(), required = False)
+# 	origin_city = serializers.PrimaryKeyRelatedField(queryset = City.objects.all(), required = False)
+
+
+# 	class Meta:
+# 		model = Profile
+# 		exclude = ('user',)
+# 		#fields = '__all__'
+# 		depth = 1
+
+# 	def update(self, instance, validated_data):
+# 		user = instance.user
+
+# 		#Updating user fields
+# 		try:
+# 			user.first_name = validated_data['first_name']
+# 		except:
+# 			print('No first_name updated')
+# 		try:
+# 			user.last_name = validated_data['last_name']
+# 		except:
+# 			print('No last_name updated')
+# 		user.save()
+
+# 		super(ProfileUpdateSerializer, self).update(instance, validated_data)
+
+# 		return instance
+
+# 	def to_representation(self, obj):
+
+# 		user = obj.user
+# 		resp = {}
+# 		token = Token.objects.get(user = user)
+# 		#profile = Profile.objects.get(user = obj)
+# 		resp['token'] = token.key
+# 		#profile_serializer = ProfileSerializer(Profile.objects.get(user = obj), many =  False)
+# 		resp['profile'] = ProfileSerializer(instance= obj, many =  False).data
+# 		resp['user'] = UserSerializer(instance = user, many =  False).data
+
+# 		return resp 
+
+
+class UserUpdatedProfileSerializer(serializers.Serializer):
+	#Basic user data
+	first_name = serializers.CharField(required = False)
+	last_name = serializers.CharField(required = False)
+
+	#NRC Segmentation data
+	role = serializers.IntegerField(required = False)
+	gender = serializers.IntegerField(required = False)
+	ethnic_group = serializers.IntegerField(required = False)
+	condition = serializers.IntegerField(required = False)
+	birthdate = serializers.DateField(required = False)
+	document_type = serializers.IntegerField(required = False)
+	document_number = serializers.CharField(required = False)
+	contact_phone = serializers.CharField(required = False)
+	origin_city = serializers.IntegerField(required = False)
+	isNRCBeneficiary = serializers.BooleanField(default = False)
+
+	def update(self, instance, validated_data):
+		#Updating user fields
+
+		user = instance.user
+		try:
+			user.first_name = validated_data['first_name']
+		except:
+			print('No first_name updated')
+		try:
+			user.last_name = validated_data['last_name']
+		except:
+			print('No last_name updated')
+		user.save()
+
+		#Updating profile
+		try:
+			instance.document_type = DocumentType.objects.get(pk = validated_data['document_type'])
+		except:
+			print('No document_type updated')
+
+		try:
+			instance.gender = Gender.objects.get(pk = validated_data['gender'])
+		except:
+			print('No gender updated')
+		try:
+			instance.ethnic_group = EthnicGroup.objects.get(pk = validated_data['ethnic_group'])
+		except:
+			print('No ethnic_group updated')
+		try:
+			instance.condition = Condition.objects.get(pk = validated_data['condition'])
+		except:
+			print('No condition updated')
+		try:
+			instance.origin_city = City.objects.get(pk = validated_data['origin_city'])
+		except:
+			print('No origin_city updated')
+		try:
+			instance.role = Role.objects.get(pk = validated_data['role'])
+		except:
+			print('No role updated')
+
+		try:
+			instance.document_number = validated_data['document_number']
+		except:
+			print('No document_number updated')
+
+		try:
+			instance.birthdate = validated_data['birthdate']
+		except:
+			print('No birthdate updated')
+
+		try:
+			instance.isNRCBeneficiary = validated_data['isNRCBeneficiary']
+		except:
+			print('No isNRCBeneficiary updated')
+
+		try:
+			instance.contact_phone = validated_data['contact_phone']
+		except:
+			print('War: contact_phone missing')
+
+		instance.save()
+
+		return instance
+
+	def to_representation(self, obj):
+
+		user = obj.user
+		resp = {}
+		token = Token.objects.get(user = user)
+		#profile = Profile.objects.get(user = obj)
+		resp['token'] = token.key
+		#profile_serializer = ProfileSerializer(Profile.objects.get(user = obj), many =  False)
+		resp['profile'] = ProfileSerializer(instance= obj, many =  False).data
+		resp['user'] = UserSerializer(instance = user, many =  False).data
+
+		return resp 
+
 
 class SosContactSerializer(serializers.ModelSerializer):
 	"""Serializer for emergency contact model"""
@@ -149,7 +339,7 @@ class UserProfileCreateSerializer(serializers.Serializer):
 	condition = serializers.IntegerField(required = False)
 	birthdate = serializers.DateField(required = False)
 	document_type = serializers.IntegerField(required = False)
-	document_number = serializers.CharField(required = False)
+	document_number = serializers.CharField(required = False, allow_null = True, allow_blank = True)
 	contact_phone = serializers.CharField(required = False)
 	origin_city = serializers.IntegerField(required = False)
 	isNRCBeneficiary = serializers.BooleanField(default = False)
@@ -184,19 +374,25 @@ class UserProfileCreateSerializer(serializers.Serializer):
 		profile = Profile.objects.create(
 			user = user, 
 			gender = gender,
-			document_number = validated_data['document_number'],
 			birthdate = validated_data['birthdate'],
 			isNRCBeneficiary = validated_data['isNRCBeneficiary'])
-		# profile.ethnic_group = EthnicGroup.objects.get(pk = validated_data['ethnic_group'])
-		# profile.condition = Condition.objects.get(pk = validated_data['condition'])
-		profile.document_type = DocumentType.objects.get(pk = validated_data['document_type'])
-		# profile.origin_city = City.objects.get(pk = validated_data['origin_city'])
-		# profile.role = Role.objects.get(pk = validated_data['role'])
+
+
+		try:
+			profile.document_number = validated_data['document_number']
+		except:
+			print('War: document_number missing')
+
+		try:
+			profile.document_type = DocumentType.objects.get(pk = validated_data['document_type'])
+		except:
+			print('War: document_type missing')
 
 		try:
 			profile.contact_phone = validated_data['contact_phone']
 		except:
 			print('War: contact_phone missing')
+
 		profile.save()
 
 		try:
@@ -260,14 +456,8 @@ class UserProfileCreateSerializer(serializers.Serializer):
 		token = Token.objects.get(user = obj)
 		profile = Profile.objects.get(user = obj)
 		resp['token'] = token.key
-		#resp['id'] = obj.id
 		profile_serializer = ProfileSerializer(Profile.objects.get(user = obj), many =  False)
-		#profile_serializer = ProfileSerializer(data = profile, many =  False)
-		#profile_serializer.is_valid(raise_exception=True)
 		resp['profile'] = ProfileSerializer(Profile.objects.get(user = obj), many =  False).data
-		print('serializado perfile')
-		#user_serializer = UserSerializer(User.objects.get(username = obj.username), many =  False)
-		#user_serializer.is_valid(raise_exception=True)
 		resp['user'] = UserSerializer(User.objects.get(username = obj.username), many =  False).data
 
 		return resp
@@ -280,6 +470,7 @@ class UserAvatarSerializer(serializers.Serializer):
 
 
 	def create(self, validated_data):
+		#Se personaliza para manejar que sol exista una pieza por parte del cuerpo y por usuario
 		piece = AvatarPiece.objects.get(pk = validated_data['avatar_piece'])
 		#print('encontrado piece' + str(piece))
 		user = User.objects.get(pk = validated_data['user'])
@@ -305,10 +496,14 @@ class UserAvatarResponseSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = AvatarPiece
 		fields = ('user', 'avatar_piece',)
+		depth = 2
 
 
 class ListUserAvatarSerializer(serializers.ListSerializer):
 	child = UserAvatarSerializer()
+
+	def to_representation(self, instance):
+		return UserAvatarResponseSerializer(UserAvatar.objects.filter(user = self.context['request'].user), context={'request': self.context['request']}, many = True).data
 
 
 class ContactFormSerializer(serializers.ModelSerializer):
@@ -323,7 +518,8 @@ class ContactFormSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 
 
-
+class ListUserTopicProgress(serializers.ListSerializer):
+	child = UserTopicProgressSerializer()
 
 
 
