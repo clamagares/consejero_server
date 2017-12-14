@@ -62,15 +62,22 @@ class TopicSerializer(serializers.ModelSerializer):
 		model = Topic
 		fields = ('id','course','name','abreviature','description','icon','topic_activity_list')
 		depth = 1
+
+	def get_queryset(self, obj):
+		return Topic.objects.all().order_by('-id')
 		
 
 class CourseSerializer(serializers.ModelSerializer):
 
-	course_topics = TopicSerializer(many = True)
+	course_topics = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Courses
 		fields = ('id','name','abreviature','description','icon','course_topics')
+
+	def get_course_topics(self, obj):
+		orderder_queryset = Topic.objects.filter(course = obj).order_by('id')
+		return TopicSerializer(orderder_queryset, many = True).data
 		
 
 class UserTopicProgressSerializer(serializers.ModelSerializer):
