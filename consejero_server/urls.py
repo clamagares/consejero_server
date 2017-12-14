@@ -24,3 +24,6 @@ urlpatterns = [
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
+admin.site.site_header = 'Conse - Sitio de administración'
+admin.site.index_title = 'Conse'
+admin.site.site_title = 'Sitio de administración - Conse'

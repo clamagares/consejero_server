@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^emergency_contact/$', views.EmergencyContactsView.as_view()),
     url(r'^emergency_contact/(?P<pk>[0-9]+)/$', views.EmergencyContactEdit.as_view()),
     url(r'^user_avatar/$', views.UserAvatarPieces.as_view()),
+    url(r'^contact_form/$', views.ContactForm.as_view()),
+    url(r'^user_progress/$', views.SaveUserProgress.as_view()),
 ]

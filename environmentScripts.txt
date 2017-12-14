@@ -8,7 +8,7 @@ Windows
 pip install psycopg2
 
 #Connect to database
-psql -U postgres
+psql -U postgres -d dbname
 
 #List all databases
 \l
@@ -18,6 +18,10 @@ create user consejero_app with password 'admin';
 
 #Postgres DB
 create database consejerodb with owner consejero_app;
+	
+#Si data base no empieza en osx
+rm /usr/local/var/postgres/postmaster.pid # Remueve proceso anterior
+pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start #inicia nuevamente db
 
 #Superuser
 admin abc12345 daniel.trujillo@angelapp.com.co
@@ -25,7 +29,7 @@ admin abc12345 daniel.trujillo@angelapp.com.co
 
 #ApiKey for Development Windows dtrujila
 2e0fa1b1f997bcd16d390d75306c462e088fb1b3
-=======
+
 #api Key for macbook
 97d2a5f811e22f674c79b5d353aa3b6a6b1d6ad7
 
@@ -34,4 +38,7 @@ https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgres
 
 #ApiKey consejo.nrc.org.co
 f7a328923cf5664e64b4dd0be59a1e787c6b8140
+
+#Api key for live v2
+3036c87d7f906cc2b8155b7a70428eb008de81aa
 

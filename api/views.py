@@ -34,7 +34,7 @@ class ApplicationConfigurationView(generics.RetrieveAPIView):
 class UsersView(generics.RetrieveUpdateDestroyAPIView):
 	"""View for get the user info"""
 	queryset = Profile.objects.all()
-	serializer_class = ProfileSerializer
+	serializer_class = UserUpdatedProfileSerializer
 	permission_classes = (IsOwner,)
 
 class CreateUsersView(generics.CreateAPIView):
@@ -63,10 +63,27 @@ class UserAvatarPieces(generics.ListCreateAPIView):
 	permission_classes = (IsOwner,)
 	queryset = UserAvatar.objects.all()
 	serializer_class = ListUserAvatarSerializer
-	
 
 	# def list(self, request):
 	# 	# Note the use of `get_queryset()` instead of `self.queryset`
 	# 	queryset = self.get_queryset()
 	# 	serializer = UserAvatarSerializer(queryset, many=True)
 	# 	return Response(serializer.data)
+
+
+
+class ContactForm(generics.CreateAPIView):
+	"""View to create contact forms"""
+
+	queryset = ContactForm.objects.all()
+	serializer_class = ContactFormSerializer
+
+
+class SaveUserProgress(generics.ListCreateAPIView):
+	"""View to save user activity progress"""
+
+	serializer_class = ListUserTopicProgress
+	permission_classes = (IsOwner,)
+
+
+

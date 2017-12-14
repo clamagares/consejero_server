@@ -144,3 +144,10 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+
+EMAIL_USE_TLS = smtp_tls
+EMAIL_HOST = smtp_server
+EMAIL_HOST_USER = smtp_user
+EMAIL_HOST_PASSWORD = smtp_psw
+EMAIL_PORT = smpt_port
