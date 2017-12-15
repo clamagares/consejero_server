@@ -76,8 +76,9 @@ class CourseSerializer(serializers.ModelSerializer):
 		fields = ('id','name','abreviature','description','icon','course_topics')
 
 	def get_course_topics(self, obj):
+
 		orderder_queryset = Topic.objects.filter(course = obj).order_by('id')
-		return TopicSerializer(orderder_queryset, many = True).data
+		return TopicSerializer(orderder_queryset, context={'request': self.context['request']}, many = True).data
 		
 
 class UserTopicProgressSerializer(serializers.ModelSerializer):
