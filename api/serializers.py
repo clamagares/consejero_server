@@ -532,7 +532,67 @@ class ListUserTopicProgress(serializers.ListSerializer):
 
 
 
+class UserLogginSerializer(serializers.Serializer):
+	"""Serializer to loggin atempt"""
 
+	email = serializers.EmailField()
+	password = serializers.CharField()
 
+	def validate(self, attrs):
+		email = attrs.get('email')
+		password = attrs.get('password')
 
+		if email and password:
+			# Check if user sent email
+			try:
+				user_request = User.objects.get(email=email.lower())
+			except User.DoesNotExist:
+				msg = (USER_NOT_EXISTS)
+				raise CustomValidation(msg, 404)
 
+			email = user_request.email.lower()
+
+			#Validate user credentials
+			user = authenticate(username=email.lower(), password=password)
+
+			if user:
+				#Validate user is active
+				if not user.is_active:
+					msg = (USER_ACCOUNT_INACTIVE)
+					raise CustomValidation(msg, 404)
+			else:
+				msg = (USER_CREDENTIALS_NOT_VALID)
+				raise CustomValidation(msg, 404)
+				#raise exceptions.ValidationError(msg)
+		else:
+			msg = (USER_MISSING_EMAIL_OR_PASSWROD)
+			raise CustomValidation(msg, 404)
+
+		attrs['user'] = user
+		return attrs
+
+	def to_representation(self, obj):
+		resp = {}
+		token = Token.objects.get(user = obj)
+		profile = Profile.objects.get(user = obj)
+		resp['token'] = token.key
+		profile_serializer = ProfileSerializer(Profile.objects.get(user = obj), many =  False)
+		resp['profile'] = ProfileSerializer(Profile.objects.get(user = obj), many =  False).data
+		resp['user'] = UserSerializer(User.objects.get(username = obj.username), many =  False).data
+		return resp
+
+class SimplePostResponseSerializer(serializers.Serializer):
+
+    detail = serializers.CharField()
+    
+
+class PasswordRecoverySerializer(serializers.Serializer):
+	email = serializers.EmailField()
+
+	def validate_email(self, value):
+		if User.objects.filter(email=value.lower()):
+			return value
+		else:
+			msg = (USER_NOT_EXISTS)
+			raise CustomValidation(msg, 404)
+		#return value

@@ -87,3 +87,47 @@ class SaveUserProgress(generics.ListCreateAPIView):
 
 
 
+class AuthUser(APIView):
+	"""Api view for loggin user"""
+	parser_classes = (
+		parsers.FormParser,
+		parsers.MultiPartParser,
+		parsers.JSONParser,
+	)
+	renderer_classes = (renderers.JSONRenderer,)
+	serializer_class = UserLogginSerializer
+
+	def post(self, request):
+		serializer = UserLogginSerializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		email = serializer.validated_data['email']
+		password = serializer.validated_data['password']
+		user = serializer.validated_data['user']
+		token, created = Token.objects.get_or_create(user=user)
+		content = {}
+		ser = UserLogginSerializer(user)
+		return Response(ser.data)
+
+
+class PostPasswordRecovery(APIView):
+    """Api view for recovery password"""
+    parser_classes = (
+        parsers.FormParser,
+        parsers.MultiPartParser,
+        parsers.JSONParser,
+    )
+    renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = PasswordRecoverySerializer
+
+    def post(self, request):
+        serializer = PasswordRecoverySerializer(data = request.data)
+        serializer.is_valid(raise_exception = True)
+        email = serializer.validated_data['email']
+        user = get_object_or_404(User, email = email)
+        password = user.first_name + password_generator()
+        user.set_password(password)
+        user.save()
+        email_password_recovery(email, password)
+        response = SimplePostResponseSerializer(data = {'detail' : PASSWORD_RECOVERY_SUCCESSFUL})
+        response.is_valid()
+        return Response(response.data)
