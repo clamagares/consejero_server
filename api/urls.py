@@ -18,4 +18,6 @@ urlpatterns = [
     url(r'^user_avatar/$', views.UserAvatarPieces.as_view()),
     url(r'^contact_form/$', views.ContactForm.as_view()),
     url(r'^user_progress/$', views.SaveUserProgress.as_view()),
+    url(r'^user_auth/$', views.AuthUser.as_view()),
+    url(r'^user_password_recovery/$', views.PostPasswordRecovery.as_view()),
 ]
