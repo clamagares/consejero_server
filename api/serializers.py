@@ -34,6 +34,7 @@ class AppConfigurationSerializer(serializers.ModelSerializer):
 		resp['document_type_list'] = DocumentTypeSerializer(DocumentType.objects.all(), many = True).data
 		print(str(resp['document_type_list']))
 		resp['gender_list'] = GenderSerializer(Gender.objects.all(), many = True).data
+		resp['state_list'] = StateSerializer(State.objects.all(), many = True).data
 		resp['city_list'] = CitySerializer(City.objects.all(), many = True).data
 		resp['condition_list'] = ConditionSerializer(Condition.objects.all(), many = True).data
 		resp['ethnic_group_list'] = EthnicGroupSerializer(EthnicGroup.objects.all(), many = True).data
@@ -113,6 +114,13 @@ class CitySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = City
 		fields = ('id','name', 'code','abreviature','state','description','icon',)
+
+class StateSerializer(serializers.ModelSerializer):
+	"""Model to serializer state"""
+
+	class Meta:
+		model = State
+		fields = ('id','name', 'code','abreviature','description','icon',)
 
 class ConditionSerializer(serializers.ModelSerializer):
 	"""Model to serializer condition"""
