@@ -9,6 +9,7 @@ class ApplicationConfiguration(models.Model):
 	video_tutorial_id = models.CharField(max_length = 150, blank = True, null = True, verbose_name = 'ID Youtube Video Tutorial')
 	emergency_message = models.TextField(verbose_name = 'Plantilla de mensaje de emergencia')
 	about_noruegan_council = models.TextField(verbose_name = 'Acerca del NRC')
+	terms_condition_url = models.URLField(verbose_name = 'URL Términos y condiciones', blank = True, null = True)
 	email_contact_us = models.EmailField(max_length = 150, verbose_name = 'Email de recepción mensajes de contacto')
 	debug_mode = models.BooleanField(default = True, verbose_name = 'Habilitar modo debug')
 	min_pin_length = models.SmallIntegerField(verbose_name = 'Longitud mínima de pin')
