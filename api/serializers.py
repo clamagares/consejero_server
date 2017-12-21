@@ -28,6 +28,7 @@ class AppConfigurationSerializer(serializers.ModelSerializer):
 		resp['video_tutorial_id'] = instance.video_tutorial_id
 		resp['emergency_message'] = instance.emergency_message
 		resp['about_noruegan_council'] = instance.about_noruegan_council
+		resp['terms_condition_url'] = instance.terms_condition_url
 		resp['min_pin_length'] = instance.min_pin_length
 		resp['psw_regular_expression'] = instance.psw_regular_expression
 		resp['psw_error_recomendation'] = instance.psw_error_recomendation
