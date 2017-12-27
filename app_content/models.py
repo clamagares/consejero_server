@@ -92,6 +92,7 @@ class DocumentTextType(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -105,17 +106,18 @@ class Document(models.Model):
 	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
 	code = models.TextField(null = True, blank = True, verbose_name = 'Código')
 	url = models.URLField(null = True, blank = True, verbose_name = 'URL')
-	extensión = models.CharField(max_length = 10,null = True, blank = True, verbose_name = 'Extensión')
+	extension = models.CharField(max_length = 10,null = True, blank = True, verbose_name = 'Extensión')
 	icon = models.ImageField(
 		upload_to = 'app_images/documents_icon',
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 	file = models.FileField(upload_to = 'Library', verbose_name = 'Archivo', null = True, blank = True)
 
 	def __str__(self):
-		return self.doc_type + '-' + self.name
+		return str(self.doc_type) + '-' + self.name
 
 class DocumentTags(models.Model):
 	"""Relation between document and tags"""
