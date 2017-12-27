@@ -1,6 +1,7 @@
 from django.db import models
 from Users.models import *
 from django.contrib.auth.models import User
+from user_interaction.models import *
 
 # Create your models here.
 
@@ -84,6 +85,7 @@ class NewsFeed(models.Model):
 
 class DocumentTextType(models.Model):
 	"""Atomic model for document cateogries"""
+	course = models.ForeignKey('user_interaction.Courses', verbose_name = 'Categoría de curso', null = True, blank = True)
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
 	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
 	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
@@ -96,7 +98,7 @@ class DocumentTextType(models.Model):
 		verbose_name = 'Ícono')
 
 	def __str__(self):
-		return self.name
+		return self.name + " - " + str(self.course)
 
 
 class Document(models.Model):
@@ -104,6 +106,7 @@ class Document(models.Model):
 	doc_type = models.ForeignKey('DocumentTextType', verbose_name = 'Tipo de documento')
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
 	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	date = models.CharField(max_length = 50,null = True, blank = True, verbose_name = 'Fecha de documento')
 	code = models.TextField(null = True, blank = True, verbose_name = 'Código')
 	url = models.URLField(null = True, blank = True, verbose_name = 'URL')
 	extension = models.CharField(max_length = 10,null = True, blank = True, verbose_name = 'Extensión')
