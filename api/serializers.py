@@ -605,3 +605,17 @@ class PasswordRecoverySerializer(serializers.Serializer):
 			msg = (USER_NOT_EXISTS)
 			raise CustomValidation(msg, 404)
 		#return value
+
+
+class DocumentTextSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Document
+		fields = ('id','name','description','date','code','url','extension','icon','file')
+
+class DocumentLibrarySerializer(serializers.ModelSerializer):
+	"""Serializer for the library docs and types"""
+	document_by_type = DocumentTextSerializer(many = True, read_only = True)
+
+	class Meta:
+		model = DocumentTextType
+		fields = ('id','course','name','abreviature','description','icon','document_by_type',)

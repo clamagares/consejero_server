@@ -85,6 +85,10 @@ class SaveUserProgress(generics.ListCreateAPIView):
 	serializer_class = ListUserTopicProgress
 	permission_classes = (IsOwner,)
 
+class GetLibraryDocs(generics.ListCreateAPIView):
+	"""View to get the library docs"""
+	serializer_class = DocumentLibrarySerializer
+	queryset = DocumentTextType.objects.all()
 
 
 class AuthUser(APIView):
