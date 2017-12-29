@@ -85,7 +85,7 @@ class NewsFeed(models.Model):
 
 class DocumentTextType(models.Model):
 	"""Atomic model for document cateogries"""
-	course = models.ForeignKey('user_interaction.Courses', verbose_name = 'Categoría de curso', null = True, blank = True)
+	course = models.ForeignKey('user_interaction.Courses', verbose_name = 'Categoría de curso', null = True, blank = True, related_name = 'courses_docs_types')
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
 	abreviature = models.CharField(max_length = 100, verbose_name = 'Abreviatura', blank = True, null = True)
 	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
@@ -103,7 +103,7 @@ class DocumentTextType(models.Model):
 
 class Document(models.Model):
 	"""Model for files in the library"""
-	doc_type = models.ForeignKey('DocumentTextType', verbose_name = 'Tipo de documento')
+	doc_type = models.ForeignKey('DocumentTextType', verbose_name = 'Tipo de documento', related_name = 'document_by_type')
 	name = models.CharField(max_length = 100, verbose_name = 'Nombre')
 	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
 	date = models.CharField(max_length = 50,null = True, blank = True, verbose_name = 'Fecha de documento')
