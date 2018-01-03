@@ -619,3 +619,21 @@ class DocumentLibrarySerializer(serializers.ModelSerializer):
 	class Meta:
 		model = DocumentTextType
 		fields = ('id','course','name','abreviature','description','icon','document_by_type',)
+
+
+class CorporatePhoneBookSerializer(serializers.ModelSerializer):
+	"""Serializer for a corporate book input"""
+
+	class Meta:
+		model = CorporatePhoneBook
+		fields = '__all__'
+
+
+class CorporateTypeSerializer(serializers.ModelSerializer):
+	"""Serielizer for the corporate phone book list segmented by type"""
+
+	organization_by_type = CorporatePhoneBookSerializer(many = True, read_only = True)
+
+	class Meta:
+		model = OrganizationType
+		fields = ('id','name','description','icon','organization_by_type',)

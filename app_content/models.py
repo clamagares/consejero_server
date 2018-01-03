@@ -31,6 +31,7 @@ class NewsCategory(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -57,31 +58,32 @@ class NewsTags(models.Model):
 	new = models.ForeignKey('NewsFeed', related_name = 'news_tags', verbose_name = 'Noticia asociada')
 
 	def __str__(self):
-		return self.tag + '-' + self.new
+		return tr(self.tag) + '-' + str(self.new)
 
 
 class NewsFeed(models.Model):
 	"""Model for neews to publish"""
 	category = models.ForeignKey('NewsCategory', related_name = 'news_category', verbose_name = 'Categoria')
 	tittle = models.CharField(max_length = 150, verbose_name = 'Título')
-	abstract = models.CharField(max_length = 200, blank = True, null = True, verbose_name = 'Vista previa/Resumen')
-	detail = models.TextField(verbose_name = 'Detalle')
-	more_info_link = models.URLField(blank = True, null = True, verbose_name = 'Link para más información')
-	image = models.ImageField(
-		upload_to = 'app_images/news_feed_images',
-		max_length = 255, 
-		help_text = '200x200 píxeles', 
-		null = True,
-		verbose_name = 'Imagen')
-	published = models.BooleanField(default = False, verbose_name = 'Publicado?')
-	since = models.DateTimeField(verbose_name = 'Publicado desde')
-	until = models.DateTimeField(verbose_name = 'Publicado hasta')
-	priority = models.IntegerField(verbose_name = 'Prioridad')
-	created_time = models.DateTimeField(auto_now_add = True, verbose_name = 'Fecha de creación')
-	created_by = models.ForeignKey('auth.User', verbose_name = 'Usuario creador')
+	#abstract = models.CharField(max_length = 200, blank = True, null = True, verbose_name = 'Vista previa/Resumen')
+	#detail = models.TextField(verbose_name = 'Detalle')
+	city = models.ForeignKey('Users.City', null = True, blank = True, verbose_name = 'Ciudad', related_name = 'news_by_city')
+	more_info_link = models.URLField(blank = True, null = True, verbose_name = 'URL')
+	#image = models.ImageField(
+	#	upload_to = 'app_images/news_feed_images',
+	#	max_length = 255, 
+	#	help_text = '200x200 píxeles', 
+	#	null = True,
+	#	verbose_name = 'Imagen')
+	#published = models.BooleanField(default = False, verbose_name = 'Publicado?')
+	#since = models.DateTimeField(verbose_name = 'Publicado desde')
+	#until = models.DateTimeField(verbose_name = 'Publicado hasta')
+	#priority = models.IntegerField(verbose_name = 'Prioridad')
+	#created_time = models.DateTimeField(auto_now_add = True, verbose_name = 'Fecha de creación')
+	#created_by = models.ForeignKey('auth.User', verbose_name = 'Usuario creador')
 
 	def __str__(self):
-		return self.category + '-' + self.tittle
+		return str(self.category) + '-' + self.tittle
 
 class DocumentTextType(models.Model):
 	"""Atomic model for document cateogries"""
@@ -128,7 +130,7 @@ class DocumentTags(models.Model):
 	document = models.ForeignKey('Document', related_name = 'document_tags', verbose_name = 'Documento asociado')
 
 	def __str__(self):
-		return self.tag + '-' + self.document
+		return self.tag + '-' + str(self.document)
 
 
 class OrganizationType(models.Model):
@@ -141,6 +143,7 @@ class OrganizationType(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -157,6 +160,7 @@ class Organization(models.Model):
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
@@ -165,17 +169,26 @@ class Organization(models.Model):
 
 class CorporatePhoneBook(models.Model):
 	"""Model for organization branch offices"""
-	organization = models.ForeignKey('Organization', verbose_name = 'Organización')
-	phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Phone')
+	organization_type = models.ForeignKey('OrganizationType', null = True, blank = True, verbose_name = 'Tipo de Organización', related_name = 'organization_by_type')
+	city = models.ForeignKey('Users.City', verbose_name = 'Ciudad', null = True, blank = True)
+	name = models.CharField(max_length = 100, null = True, blank = True,verbose_name = 'Nombre')
+	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
+	phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Teléfono')
+	mobile_phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Móvil')
 	address = models.TextField(max_length = 150, null = True, blank = True, verbose_name = 'Dirección')
-	city = models.ForeignKey('Users.City', verbose_name = 'Ciudad')
+	url = models.URLField(null = True, blank = True, verbose_name = 'Página Web')
+	twitter = models.CharField(max_length = 150, null = True, blank = True, verbose_name = 'Twitter')
+	email = models.EmailField(null = True, blank = True, verbose_name = 'Email de contacto')
 	schedule = models.TextField(null = True, blank = True, verbose_name = 'Horario')
+	latitude = models.DecimalField(max_digits = 9, decimal_places = 7, null = True, blank = True, verbose_name = 'Latitud')
+	longitude = models.DecimalField(max_digits = 9, decimal_places = 7, null = True, blank = True, verbose_name = 'Longitud')
 	icon = models.ImageField(
 		upload_to = 'app_images/organization_branch_icon',
 		max_length = 255, 
 		help_text = '200x200 píxeles', 
 		null = True,
+		blank = True,
 		verbose_name = 'Ícono')
 
 	def __str__(self):
-		return self.organization + '-' + self.city
+		return self.name + '-' + str(self.city)
