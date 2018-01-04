@@ -16,6 +16,7 @@ class ApplicationConfiguration(models.Model):
 	min_pin_length = models.SmallIntegerField(verbose_name = 'Longitud mínima de pin')
 	psw_regular_expression = models.CharField(max_length = 150, blank = True, null = True, verbose_name = 'Expresión regular contraseña')
 	psw_error_recomendation =models.CharField(max_length = 150, blank = True, null = True, verbose_name = 'Mensaje para expresión de contraseña')
+	radius_shell_filter = models.IntegerField(blank = True, null = True, verbose_name = 'Radio de filtro de Escudos [km]')
 
 	def __str__(self):
 		return self.video_tutorial_id

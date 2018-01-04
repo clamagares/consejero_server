@@ -621,11 +621,34 @@ class DocumentLibrarySerializer(serializers.ModelSerializer):
 		fields = ('id','course','name','abreviature','description','icon','document_by_type',)
 
 
+class CorporatePhoneBookSerializerFilter(serializers.ListSerializer):
+
+	def to_representation(self, data):
+		latitude = self.context['request'].query_params.get('latitude', None)
+		longitude = self.context['request'].query_params.get('longitude', None)
+
+		if latitude is not None and longitude is not None:
+			limits = limits = get_min_max_lat_long(latitude, longitude)
+			data = data.filter(latitude__gte = limits[0], 
+				latitude__lte = limits[1],
+				longitude__gte = limits[2],
+				longitude__lte = limits[3])
+			# data = data.value('organization_type')
+		
+		return super(CorporatePhoneBookSerializerFilter, self).to_representation(data)
+
+
+# class CorporateTypeSerializerFilter(serializers.ListSerializer):
+
+# 	def to_representation(self, data):
+# 		data = data.filter(organization_by_type)
+
 class CorporatePhoneBookSerializer(serializers.ModelSerializer):
 	"""Serializer for a corporate book input"""
 
 	class Meta:
 		model = CorporatePhoneBook
+		list_serializer_class = CorporatePhoneBookSerializerFilter
 		fields = '__all__'
 
 

@@ -24,6 +24,7 @@ from django.contrib.auth.models import User
 
 from api.permissions import *
 from api.serializers import *
+from api.utils import *
 
 class ApplicationConfigurationView(generics.RetrieveAPIView):
 	"""Get the application basic configuration"""
@@ -92,8 +93,11 @@ class GetLibraryDocs(generics.ListCreateAPIView):
 
 
 class GetCorporatePhoneBook(generics.ListCreateAPIView):
-	serializer_class = CorporateTypeSerializer
+
+	serializer_class = CorporateTypeSerializer	
 	queryset = OrganizationType.objects.all()
+
+
 
 
 class AuthUser(APIView):

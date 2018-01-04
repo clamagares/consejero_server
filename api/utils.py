@@ -2,9 +2,26 @@ import os
 import uuid
 from rest_framework.exceptions import APIException
 from django.utils.encoding import force_text
-from app_content.models import *
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+
+from consejero_server.local_settings import DEGREES_TO_KM
+from app_content.models import *
+
+
+def get_min_max_lat_long(lat,lng):
+    from app_content.models import ApplicationConfiguration
+
+    radius = ApplicationConfiguration.objects.get(id = 1).radius_shell_filter
+    lati = float(lat)
+    longi = float(lng)
+    min_lat = lati - radius/DEGREES_TO_KM
+    max_lat = lati + radius/DEGREES_TO_KM
+    min_long = longi - radius/DEGREES_TO_KM
+    max_long = longi + radius/DEGREES_TO_KM
+    return [min_lat, max_lat, min_long, max_long]
+
+
 
 class CustomValidation(APIException):
     """Returns personalized code and message to a failed request"""
@@ -43,6 +60,10 @@ def email_password_recovery(email, password):
     msg.attach_alternative(message, "text/html")
     msg.send()
     #ToDo: implements this function async
+
+
+
+
 
 
 
