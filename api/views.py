@@ -91,6 +91,11 @@ class GetLibraryDocs(generics.ListCreateAPIView):
 	queryset = DocumentTextType.objects.all()
 
 
+class GetCorporatePhoneBook(generics.ListCreateAPIView):
+	serializer_class = CorporateTypeSerializer
+	queryset = OrganizationType.objects.all()
+
+
 class AuthUser(APIView):
 	"""Api view for loggin user"""
 	parser_classes = (
