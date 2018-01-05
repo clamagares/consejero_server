@@ -638,11 +638,6 @@ class CorporatePhoneBookSerializerFilter(serializers.ListSerializer):
 		return super(CorporatePhoneBookSerializerFilter, self).to_representation(data)
 
 
-# class CorporateTypeSerializerFilter(serializers.ListSerializer):
-
-# 	def to_representation(self, data):
-# 		data = data.filter(organization_by_type)
-
 class CorporatePhoneBookSerializer(serializers.ModelSerializer):
 	"""Serializer for a corporate book input"""
 
@@ -660,3 +655,26 @@ class CorporateTypeSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = OrganizationType
 		fields = ('id','name','description','icon','organization_by_type',)
+
+
+class NewsSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = NewsFeed
+		fields = ('id','tittle','city','more_info_link',)
+		depth = 1
+
+class NewsCategorySerializer(serializers.ModelSerializer):
+
+	news_category = NewsSerializer(many = True, read_only = True)
+
+	class Meta:
+		model = NewsCategory
+		fields = ('id','name','abreviature','description','icon','news_category',)
+
+
+
+
+
+
+

@@ -98,6 +98,10 @@ class GetCorporatePhoneBook(generics.ListCreateAPIView):
 	queryset = OrganizationType.objects.all()
 
 
+class GetNewsFeedList(generics.ListCreateAPIView):
+
+	serializer_class = NewsCategorySerializer	
+	queryset = NewsCategory.objects.all()
 
 
 class AuthUser(APIView):
