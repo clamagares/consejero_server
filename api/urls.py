@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^user_password_recovery/$', views.PostPasswordRecovery.as_view()),
     url(r'^get_library_docs/$', views.GetLibraryDocs.as_view()),
     url(r'^get_corporate_phone_book$', views.GetCorporatePhoneBook.as_view()),
+    url(r'^get_news_list/$', views.GetNewsFeedList.as_view()),
 ]
