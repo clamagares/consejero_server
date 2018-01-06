@@ -172,7 +172,7 @@ class CorporatePhoneBook(models.Model):
 	"""Model for organization branch offices"""
 	organization_type = models.ForeignKey('OrganizationType', null = True, blank = True, verbose_name = 'Tipo de Organización', related_name = 'organization_by_type')
 	city = models.ForeignKey('Users.City', verbose_name = 'Ciudad', null = True, blank = True)
-	name = models.CharField(max_length = 100, null = True, blank = True,verbose_name = 'Nombre')
+	name = models.CharField(max_length = 300, null = True, blank = True,verbose_name = 'Nombre')
 	description = models.TextField(null = True, blank = True, verbose_name = 'Descripción')
 	phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Teléfono')
 	mobile_phone = models.CharField(max_length = 50, null = True, blank = True, verbose_name = 'Móvil')
