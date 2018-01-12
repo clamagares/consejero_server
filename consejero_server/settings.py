@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from consejero_server.local_settings import *
+#from consejero_server.conse_dashboard import ConseDashboard
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,6 +33,13 @@ ALLOWED_HOSTS = ['piensaentic.co','consejo.nrc.org.co']
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_tools_stats',
+    #'chart_tools',
+    'django_nvd3',
+    'admin_tools',
+    'admin_tools.theming',
+    'admin_tools.menu',
+    'admin_tools.dashboard',
     'api',
     'Users',
     'app_content',
@@ -45,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_api_key',
     'rest_framework.authtoken',
+    
 ]
 
 MIDDLEWARE = [
@@ -63,15 +72,23 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
+        #'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                #'django.core.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
+            ],
+            'loaders':[
+                'admin_tools.template_loaders.Loader',
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                
             ],
         },
     },
@@ -152,3 +169,5 @@ EMAIL_HOST = smtp_server
 EMAIL_HOST_USER = smtp_user
 EMAIL_HOST_PASSWORD = smtp_psw
 EMAIL_PORT = smpt_port
+
+#ADMIN_TOOLS_INDEX_DASHBOARD = ConseDashboard
