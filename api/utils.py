@@ -38,6 +38,7 @@ class CustomValidation(APIException):
 
 
 def send_contact_email(contact_form):
+    from app_content.models import ApplicationConfiguration
     subject = contact_form.message_type.name + " - Mensaje Contacto Conse"
     message = contact_form.detail
     #message = user.first_name + ' tu contraseña es: ' + password
