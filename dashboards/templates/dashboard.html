@@ -1,0 +1,55 @@
+{% extends "admin/index.html" %}
+
+{% load admin_tools_dashboard_tags %} 
+
+{% load static %}
+
+{% block extrastyle %} 
+{{ block.super }} 
+{% block dashboard_css %}
+{% admin_tools_render_dashboard_css %}
+<link href="{% static 'css/general.css' %}" rel="stylesheet"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+<script type="text/javascript">var genders = JSON.parse(JSON.stringify({{genders_percentage}}));</script>
+{% endblock %} 
+{% endblock %} 
+
+{% block content %} 
+
+<div id="container_centered">    
+	<div id="child_centered">
+
+		<h2>Usuarios por ubicación y avance</h2>
+		<table >
+			<thead>
+				<th>Ubicación</th>
+				<th>Nombre y apellido de beneficiario</th>
+				<th>Avance contenidos de la app</th>
+			</thead>
+			<tbody>
+				{%  for location in locations %}
+				<tr>
+					<center>
+						<td>{{location.locates.city.name}}</td>
+						<td>{{location.locates.user.first_name}} &nbsp; {{location.user.last_name}}</td>
+						<td>{{location.advances.topic_activity.topic.course.name}} &nbsp; {{location.advances.topic_activity.topic.name}} &nbsp; {{location.advances.topic_activity.name}}</td>
+					</center>
+				</tr>
+
+				{% endfor %}
+			</tbody>
+		</table>
+
+		<br>
+		<h2>Usuarios por género</h2>
+
+		<canvas id="pie_gender" style="width: 30%; height: 10vh;"></canvas>
+		<script type="text/javascript" src = "{% static  'js/gender_graph.js'%}" ></script>
+	</div>
+</div>
+
+
+
+
+{% endblock %} 
