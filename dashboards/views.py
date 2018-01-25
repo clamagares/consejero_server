@@ -1,16 +1,17 @@
+import json
+
+
 from django.shortcuts import render
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from Users.models import *
 from user_interaction.models import *
 from django.db import connection
-import json
 from django.utils.safestring import mark_safe
 
-class DashBoard(View):
 
+class DashBoard(View):
     def get(self, request):
-        validate_session(request)
         locations = Location.objects.all()
         advances = UserTopicProgress.objects.all().order_by('-date_completed')
         locates, progress = [], []
@@ -37,7 +38,8 @@ class DashBoard(View):
         
 
 def validate_session(request):
+    print("Session validation")
 
-    if not request.user.is_authenticated() == "False":
-        pass
-        #return redirect('login')
+
+
+
