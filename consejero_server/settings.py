@@ -30,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['consejo.nrc.org.co']
 
+LOGIN_URL = '/admin/login/'
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'Users',
     'app_content',
     'user_interaction',
+    'dashboards',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
