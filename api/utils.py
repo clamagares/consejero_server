@@ -56,7 +56,13 @@ def password_generator():
 def email_password_recovery(email, password):
     print('recovery password for ' + email)
     subject = PASSWORD_RECOVERY_EMAIL_SUBJECT
-    message = email + ' tu contraseña es: ' + password
+    #message = email + ' tu contraseña es: ' + password
+    message = render_to_string(
+        'api/contact/psw_recovery.html', {
+            'email': email,
+            'password': password,
+        }
+    )
     msg = EmailMultiAlternatives(subject,message, CONCTACT_EMAIL,[email],)
     msg.attach_alternative(message, "text/html")
     msg.send()
