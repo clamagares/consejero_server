@@ -16,19 +16,19 @@ showObjectjQuery2(gender_by_age);
 
 function fillGraph(){
   var index = 0;
-  
   genders_names.forEach(function (gender_name, i) {
-    $("#gender_by_age_div").append("<canvas id="+gender_name+" ></canvas>");
+    $("#gender_by_age_div").append("<canvas id="+gender_name+"   ></canvas>");
     var ages_for_graph = [];
     var backgounds= [];
     genders_ages.forEach(function (gender_age, i) {
-      backgrounds.push("#"+(Math.random()*0xFFFFFF<<0).toString(16));
+      backgrounds.push("#"+(Math.random()*0xF0F0F0<<0).toString(16));
       if (gender_age in gender_by_age[gender_name]){
         ages_for_graph.push(gender_by_age[gender_name][gender_age]);
       }else{
         ages_for_graph.push(0);
       }
     });
+
 
 
     new Chart(document.getElementById(gender_name), {

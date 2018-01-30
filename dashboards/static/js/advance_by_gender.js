@@ -20,22 +20,22 @@ function organizeAdvances(){
 			}
 		});
 	});
-			
+
 	advance_topics.forEach(function (topic_name, i) {
 		var topic_for_push;
 		var data_pack = [];
 		genders_names_advance.forEach(function (gender_name, i) {
-			
+
 			if (gender_by_advance[gender_name][topic_name]) {
 				data_pack.push(gender_by_advance[gender_name][topic_name]);
 			}else{
 				data_pack.push(0);
 			}
-				
+
 		});
-		
-		datasets_advance_by_gender.push({label:topic_name, data: data_pack,backgroundColor:"#"+(Math.random()*0xFFFFFF<<0).toString(16)});
-		
+
+		datasets_advance_by_gender.push({label:topic_name, data: data_pack,backgroundColor:"#"+(Math.random()*0xF0F0F0<<0).toString(16)});
+
 	});
 
 }
@@ -61,13 +61,13 @@ var bar_chart = new Chart(bar_ctx, {
         	duration: 10,
         },
         scales: {
-          xAxes: [{ 
-          	stacked: true, 
+          xAxes: [{
+          	stacked: true,
             gridLines: { display: false },
             }],
-          yAxes: [{ 
-          	stacked: true, 
-            
+          yAxes: [{
+          	stacked: true,
+
             }],
         }, // scales
         legend: {display: true}

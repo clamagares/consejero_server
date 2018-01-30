@@ -21,22 +21,22 @@ showObjectjQuery4(advance_by_ethnic_group);
 
 function organizeAdvances2(){
 
-			
+
 	advance_topics_2.forEach(function (topic_name, i) {
 		var topic_for_push;
 		var data_pack = [];
 		ethnic_group_names.forEach(function (ethnic_name, i) {
-			
+
 			if (advance_by_ethnic_group[ethnic_name][topic_name]) {
 				data_pack.push(advance_by_ethnic_group[ethnic_name][topic_name]);
 			}else{
 				data_pack.push(0);
 			}
-				
+
 		});
-		
-		datasets_advance_by_ethnic_group.push({label:topic_name, data: data_pack,backgroundColor:"#"+(Math.random()*0xFFFFFF<<0).toString(16)});
-		
+
+		datasets_advance_by_ethnic_group.push({label:topic_name, data: data_pack,backgroundColor:"#"+(Math.random()*0xF0F0F0<<0).toString(16)});
+
 	});
 
 }
@@ -62,13 +62,13 @@ var bar_chart = new Chart(bar_ctx, {
         	duration: 10,
         },
         scales: {
-          xAxes: [{ 
-          	stacked: true, 
+          xAxes: [{
+          	stacked: true,
             gridLines: { display: false },
             }],
-          yAxes: [{ 
-          	stacked: true, 
-            
+          yAxes: [{
+          	stacked: true,
+
             }],
         }, // scales
         legend: {display: true}

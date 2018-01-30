@@ -21,22 +21,22 @@ showObjectjQuery5(advance_by_condition);
 
 function organizeAdvances3(){
 
-			
+
 	advance_topics_3.forEach(function (topic_name, i) {
 		var topic_for_push;
 		var data_pack = [];
 		condition_names.forEach(function (condition_name, i) {
-			
+
 			if (advance_by_condition[condition_name][topic_name]) {
 				data_pack.push(advance_by_condition[condition_name][topic_name]);
 			}else{
 				data_pack.push(0);
 			}
-				
+
 		});
-		
-		datasets_advance_by_conditions.push({label:topic_name, data: data_pack,backgroundColor:"#"+(Math.random()*0xFFFFFF<<0).toString(16)});
-		
+
+		datasets_advance_by_conditions.push({label:topic_name, data: data_pack,backgroundColor:"#"+(Math.random()*0xF0F0F0<<0).toString(16)});
+
 	});
 
 }
@@ -62,13 +62,13 @@ var bar_chart = new Chart(bar_ctx, {
         	duration: 10,
         },
         scales: {
-          xAxes: [{ 
-          	stacked: true, 
+          xAxes: [{
+          	stacked: true,
             gridLines: { display: false },
             }],
-          yAxes: [{ 
-          	stacked: true, 
-            
+          yAxes: [{
+          	stacked: true,
+
             }],
         }, // scales
         legend: {display: true}

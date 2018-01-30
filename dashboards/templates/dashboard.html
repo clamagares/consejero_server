@@ -1,11 +1,11 @@
 {% extends "admin/index.html" %}
 
-{% load admin_tools_dashboard_tags %} 
+{% load admin_tools_dashboard_tags %}
 
 {% load static %}
 
-{% block extrastyle %} 
-{{ block.super }} 
+{% block extrastyle %}
+{{ block.super }}
 {% block dashboard_css %}
 {% admin_tools_render_dashboard_css %}
 <link href="{% static 'css/general.css' %}" rel="stylesheet"/>
@@ -34,104 +34,116 @@ var advance_by_condition = JSON.parse(JSON.stringify({{advance_by_condition}}));
 
 </script>
 
-{% endblock %} 
-{% endblock %} 
+{% endblock %}
+{% endblock %}
 
-{% block content %} 
+{% block content %}
 
-<div id="container_centered">    
-	<div id="child_centered">
 
-		<h2>Usuarios por ubicación y avance</h2>
-		<table id="location_table">
-			<thead>
-				<th>Ubicación</th>
-				<th>Nombre y apellido de beneficiario</th>
-				<th>Avance contenidos de la app</th>
-			</thead>
-			<tbody>
-				{%  for location in locations %}
-				<tr>
-					<center>
-						<td>{{location.locates.city.name}}</td>
-						<td>{{location.locates.user.first_name}} &nbsp; {{location.user.last_name}}</td>
-						<td>{{location.advances.topic_activity.topic.course.name}} &nbsp; {{location.advances.topic_activity.topic.name}} &nbsp; {{location.advances.topic_activity.name}}</td>
-					</center>
-				</tr>
 
-				{% endfor %}
-			</tbody>
-		</table>
+<center><h2>Usuarios por ubicación y avance</h2>
+<div style="width:80%">
+	<table id="location_table" style="width:90%;">
+	<thead>
+		<th>Ubicación</th>
+		<th>Nombre y apellido de beneficiario</th>
+		<th>Avance contenidos de la app</th>
+	</thead>
+	<tbody>
+		{%  for location in locations %}
+		<tr>
+			<center>
+				<td>{{location.locates.city.name}}</td>
+				<td>{{location.locates.user.first_name}} &nbsp; {{location.user.last_name}}</td>
+				<td>{{location.advances.topic_activity.topic.course.name}} &nbsp; {{location.advances.topic_activity.topic.name}} &nbsp; {{location.advances.topic_activity.name}}</td>
+			</center>
+		</tr>
 
-		<br>
-		<h2>Usuarios por género</h2>
+		{% endfor %}
+	</tbody>
+</table>
+</div>
+</center>
+<br>
 
-		<canvas id="pie_gender" style="width: 30%; height: 10vh;"></canvas>
+<div class="row">
+  <div class="column" >
+		<center><h2>Usuarios por género</h2></center>
+
+		<canvas id="pie_gender" ></canvas>
 		<script type="text/javascript" src = "{% static  'js/gender_graph.js'%}" ></script>
-
-		<h2>Usuarios por género, discriminados por edad</h2>
+		<center><h2>Usuarios por género, discriminados por edad</h2></center>
 		<div id="gender_by_age_div"></div>
 		<script type="text/javascript" src = "{% static  'js/gender_by_age_graph.js'%}" ></script>
 
-		<h2>Avance de los usuarios por género</h2>
-		<canvas id="advance_by_gender" style="width: 30%; height: 10vh;"></canvas>
+
+  </div>
+  <div class="column" >
+		<center><h2>Avance de los usuarios por género</h2></center>
+		<canvas id="advance_by_gender" ></canvas>
 		<script type="text/javascript" src = "{% static  'js/advance_by_gender.js'%}" ></script>
 
-		<h2>Avance de los usuarios por grupo étnico</h2>
-		
-		<canvas id="advance_by_ethnic_group" style="width: 30%; height: 10vh;"></canvas>
+		<center><h2>Avance de los usuarios por grupo étnico</h2></center>
+
+		<canvas id="advance_by_ethnic_group"  ></canvas>
 		<script type="text/javascript" src = "{% static  'js/advance_by_ethnic_group.js'%}" ></script>
 
-		<h2>Avance de los usuarios por condición</h2>
-		
-		<canvas id="advance_by_condition" style="width: 30%; height: 10vh;"></canvas>
+		<center><h2>Avance de los usuarios por condición</h2></center>
+
+		<canvas id="advance_by_condition"  ></canvas>
 		<script type="text/javascript" src = "{% static  'js/advance_by_condition.js'%}" ></script>
 
-		<h2>Detalles de usuarios</h2>
 
-
-		<table id="general_information">
-			<thead>
-				<tr>
-				<th>Nombre y Apellido</th>
-				<th>Tipo de documento</th>
-				<th>Número de documento</th>
-				<th>Fecha de nacimiento</th>
-				<th>Edad</th>
-				<th>Género</th>
-				<th>Grupo Étnico</th>
-				<th>Localización</th>
-				<th>Condición</th>
-				<th>Avance</th>
-				</tr>
-			</thead>
-			<tbody>
-				{%  for general_informations in general_information %}
-				<tr>
-						<td>{{general_informations.names}} </td>
-						<td>{{general_informations.doc_type}}</td>
-						<td>{{general_informations.doc_num}}</td>
-						<td>{{general_informations.birthdate}}</td>
-						<td>{{general_informations.age_general}}</td>
-						<td>{{general_informations.gender_general}}</td>
-						<td>{{general_informations.ethnic}}</td>
-						<td>{{general_informations.location_general}}</td>
-						<td>{{general_informations.conditions_general}}</td>
-						<td>{{general_informations.advance_general}}</td>
-				</tr>
-
-				{% endfor %}
-			</tbody>
-		</table>
-<br>
-		<script type="text/javascript" src = "{% static  'js/table_general_description.js'%}" ></script>
-<!-- 		<button onclick="GenerateTable();" type="button" style="background-color: #4CAF50;border: none; color: white; padding: 10px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;margin: 4px 2px;border-radius: 4px;cursor: pointer;">Exportar</button> -->
-
-
-	</div>
+  </div>
 </div>
 
 
 
 
-{% endblock %} 
+
+
+
+<center><h2>Detalles de usuarios</h2>
+<div style="width:80%">
+
+<table id="general_information"  >
+	<thead>
+		<tr>
+			<th>Nombre y Apellido</th>
+			<th>Tipo de documento</th>
+			<th>Número de documento</th>
+			<th>Fecha de nacimiento</th>
+			<th>Edad</th>
+			<th>Género</th>
+			<th>Grupo Étnico</th>
+			<th>Localización</th>
+			<th>Condición</th>
+			<th>Avance</th>
+		</tr>
+	</thead>
+	<tbody>
+		{%  for general_informations in general_information %}
+		<tr>
+			<td>{{general_informations.names}} </td>
+			<td>{{general_informations.doc_type}}</td>
+			<td>{{general_informations.doc_num}}</td>
+			<td>{{general_informations.birthdate}}</td>
+			<td>{{general_informations.age_general}}</td>
+			<td>{{general_informations.gender_general}}</td>
+			<td>{{general_informations.ethnic}}</td>
+			<td>{{general_informations.location_general}}</td>
+			<td>{{general_informations.conditions_general}}</td>
+			<td>{{general_informations.advance_general}}</td>
+		</tr>
+
+		{% endfor %}
+	</tbody>
+</table>
+</div>
+</center>
+<script type="text/javascript" src = "{% static  'js/table_general_description.js'%}" ></script>
+
+
+
+
+{% endblock %}
