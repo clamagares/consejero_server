@@ -8,8 +8,8 @@
       $.each(obj, function(k, v) {
         labels.push(k + " " + v);
         gender_percentage.push(v);
-        backgrounds.push("#"+(Math.random()*0xFFFFFF<<0).toString(16));
-        hovers_backgounds.push("#"+(Math.random()*0xFFFFFF<<0).toString(16));
+        backgrounds.push("#"+(Math.random()*0xF0F0F0<<0).toString(16));
+        hovers_backgounds.push("#"+(Math.random()*0xF0F0F0<<0).toString(16));
       });
     }
 showObjectjQuery(genders);
@@ -59,7 +59,7 @@ showObjectjQuery(genders);
               return previousValue + currentValue;
             });
              var currentValue = dataset.data[tooltipItem.index];
-             var precentage = Math.floor(((currentValue/total) * 100)+0.5);         
+             var precentage = Math.floor(((currentValue/total) * 100)+0.5);
              return precentage + "%";
            }
          }
