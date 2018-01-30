@@ -112,3 +112,6 @@ environmentScripts.txt
 app_images/
 environmentScripts.txt
 media/
+
+#Static files
+static/*
