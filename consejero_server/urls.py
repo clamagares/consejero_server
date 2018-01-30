@@ -17,11 +17,15 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf.urls.static import static
 from consejero_server import settings
+from dashboards import views
+from django.contrib.auth.decorators import login_required
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^admin_tools/', include('admin_tools.urls')),
     url(r'^api/', include('api.urls')),
+    url(r'^admin/dashboard/', login_required(views.DashBoard.as_view())),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

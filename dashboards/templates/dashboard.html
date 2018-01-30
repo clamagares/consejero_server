@@ -1,0 +1,149 @@
+{% extends "admin/index.html" %}
+
+{% load admin_tools_dashboard_tags %}
+
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+{% block dashboard_css %}
+{% admin_tools_render_dashboard_css %}
+<link href="{% static 'css/general.css' %}" rel="stylesheet"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+
+
+<script type="text/javascript">
+
+var genders = JSON.parse(JSON.stringify({{genders_percentage}}));
+var gender_by_age = JSON.parse(JSON.stringify({{genders_names_by_age}}));
+var gender_by_advance = JSON.parse(JSON.stringify({{gender_names_by_advance}}));
+var advance_by_ethnic_group = JSON.parse(JSON.stringify({{advance_by_ethnic_group}}));
+var advance_by_condition = JSON.parse(JSON.stringify({{advance_by_condition}}));
+
+
+</script>
+
+{% endblock %}
+{% endblock %}
+
+{% block content %}
+
+
+
+<center><h2>Usuarios por ubicación y avance</h2>
+<div style="width:80%">
+	<table id="location_table" style="width:90%;">
+	<thead>
+		<th>Ubicación</th>
+		<th>Nombre y apellido de beneficiario</th>
+		<th>Avance contenidos de la app</th>
+	</thead>
+	<tbody>
+		{%  for location in locations %}
+		<tr>
+			<center>
+				<td>{{location.locates.city.name}}</td>
+				<td>{{location.locates.user.first_name}} &nbsp; {{location.user.last_name}}</td>
+				<td>{{location.advances.topic_activity.topic.course.name}} &nbsp; {{location.advances.topic_activity.topic.name}} &nbsp; {{location.advances.topic_activity.name}}</td>
+			</center>
+		</tr>
+
+		{% endfor %}
+	</tbody>
+</table>
+</div>
+</center>
+<br>
+
+<div class="row">
+  <div class="column" >
+		<center><h2>Usuarios por género</h2></center>
+
+		<canvas id="pie_gender" ></canvas>
+		<script type="text/javascript" src = "{% static  'js/gender_graph.js'%}" ></script>
+		<center><h2>Usuarios por género, discriminados por edad</h2></center>
+		<div id="gender_by_age_div"></div>
+		<script type="text/javascript" src = "{% static  'js/gender_by_age_graph.js'%}" ></script>
+
+
+  </div>
+  <div class="column" >
+		<center><h2>Avance de los usuarios por género</h2></center>
+		<canvas id="advance_by_gender" ></canvas>
+		<script type="text/javascript" src = "{% static  'js/advance_by_gender.js'%}" ></script>
+
+		<center><h2>Avance de los usuarios por grupo étnico</h2></center>
+
+		<canvas id="advance_by_ethnic_group"  ></canvas>
+		<script type="text/javascript" src = "{% static  'js/advance_by_ethnic_group.js'%}" ></script>
+
+		<center><h2>Avance de los usuarios por condición</h2></center>
+
+		<canvas id="advance_by_condition"  ></canvas>
+		<script type="text/javascript" src = "{% static  'js/advance_by_condition.js'%}" ></script>
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+<center><h2>Detalles de usuarios</h2>
+<div style="width:80%">
+
+<table id="general_information"  >
+	<thead>
+		<tr>
+			<th>Nombre y Apellido</th>
+			<th>Tipo de documento</th>
+			<th>Número de documento</th>
+			<th>Fecha de nacimiento</th>
+			<th>Edad</th>
+			<th>Género</th>
+			<th>Grupo Étnico</th>
+			<th>Localización</th>
+			<th>Condición</th>
+			<th>Avance</th>
+		</tr>
+	</thead>
+	<tbody>
+		{%  for general_informations in general_information %}
+		<tr>
+			<td>{{general_informations.names}} </td>
+			<td>{{general_informations.doc_type}}</td>
+			<td>{{general_informations.doc_num}}</td>
+			<td>{{general_informations.birthdate}}</td>
+			<td>{{general_informations.age_general}}</td>
+			<td>{{general_informations.gender_general}}</td>
+			<td>{{general_informations.ethnic}}</td>
+			<td>{{general_informations.location_general}}</td>
+			<td>{{general_informations.conditions_general}}</td>
+			<td>{{general_informations.advance_general}}</td>
+		</tr>
+
+		{% endfor %}
+	</tbody>
+</table>
+</div>
+</center>
+<script type="text/javascript" src = "{% static  'js/table_general_description.js'%}" ></script>
+
+
+
+
+{% endblock %}
