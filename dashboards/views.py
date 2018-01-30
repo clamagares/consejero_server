@@ -73,21 +73,21 @@ class DashBoard(View):
                             else:
                                 gender_names_by_advance[profile.gender.name] = {advance.topic_activity.topic.description:1}
                             
-                            if profile.ethnic_group.name in advance_by_ethnic_group:
+                            if profile.ethnic_group != None and profile.ethnic_group.name in advance_by_ethnic_group:
                                 if advance.topic_activity.topic.description in advance_by_ethnic_group[profile.ethnic_group.name]:
                                     advance_by_ethnic_group[profile.ethnic_group.name][advance.topic_activity.topic.description] += 1
                                 else:
                                     advance_by_ethnic_group[profile.ethnic_group.name][advance.topic_activity.topic.description] = 1
-                            else:
+                            elif profile.ethnic_group != None:
                                 advance_by_ethnic_group[profile.ethnic_group.name] = {advance.topic_activity.topic.description:1}
 
 
-                            if profile.condition.name in advance_by_condition:
+                            if profile.condition != None and profile.condition.name in advance_by_condition:
                                 if advance.topic_activity.topic.description in advance_by_condition[profile.condition.name]:
                                     advance_by_condition[profile.condition.name][advance.topic_activity.topic.description] += 1
                                 else:
                                     advance_by_condition[profile.condition.name][advance.topic_activity.topic.description] = 1
-                            else:
+                            elif profile.condition != None:
                                 advance_by_condition[profile.condition.name] = {advance.topic_activity.topic.description:1}
             for location in locations:
                 if location.user.id == profile.user.id:
